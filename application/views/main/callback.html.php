@@ -1,2 +1,2 @@
 callback
-<pre><?php echo $data; ?></pre>
+<pre><?php echo $user_data; ?></pre>
