@@ -32,6 +32,8 @@
 	
 	ob_start();
 	
+	echo 'gt_session:' . $_GET['gt_session'];
+	
 	$dispatcher = new Dispatcher(Registry::getInstance());
 	$dispatcher->setPath(BASE_PATH);
 	$dispatcher->dispatch();

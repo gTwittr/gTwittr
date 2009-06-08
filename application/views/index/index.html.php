@@ -1,6 +1,5 @@
-<?php setCookie('oauth_token','23'); ?>
+<?php //setCookie('oauth_token','23'); ?>
 
+<a href="index.kml?gt_session=17">GeoTwitter starten</a>
 
-<a href="index.kml">GeoTwitter starten</a>
-
-<?php echo $_COOKIE['testKey']; ?>
+<?php echo $_COOKIE['oauth_token']; ?>

@@ -38,6 +38,11 @@
 		
 			$path = BASE_PATH . '/views/' . $this->controller . '/' . $this->name . '.' . $this->ctype . '.php';
 
+			echo '<pre>';
+			echo 'Controller: ' . $this->controller . '<br />';
+			echo $path;
+			echo '</pre>';
+
 			if (!file_exists($path) || !is_readable($path)) {
 				throw new Exception('View with name ' . $this->name . ' and content-type ' . $this->ctype . ' cannot be used');
 			}

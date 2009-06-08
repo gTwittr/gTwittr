@@ -14,6 +14,7 @@
 						border: 0;
 					}
 				</style>
+				Session: <?php echo $_GET['gt_session']; ?><br />
 				<iframe src="http://www.geotwitter.local/main/index.kml">
 					<i>this does not work</i>
 				</iframe>
