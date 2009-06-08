@@ -7,7 +7,7 @@
 			<flyToView>1</flyToView>
 			<Link>
 				<refreshMode>OnExpire</refreshMode>
-				<href>http://www.geotwitter.local/main/login.kml</href>
+				<href>http://<?php echo HOST_NAME; ?>/main/login.kml</href>
 			</Link>
 		</NetworkLink>
 	</Document>

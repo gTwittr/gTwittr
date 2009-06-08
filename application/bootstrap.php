@@ -6,6 +6,7 @@
 
 	require_once 'lib/FirePHPCore/FirePHP.class.php';
 	require_once 'lib/Cache/Lite.php';
+	require_once 'lib/twitteroauth/twitterOAuth.php';
 	
 	/**
 		Sorgt dafür, dass Dateien, die Klassen enthalten automatisch eingeladen werden.
@@ -31,9 +32,7 @@
 	session_start();
 	
 	ob_start();
-	
-	echo 'gt_session:' . $_GET['gt_session'];
-	
+
 	$dispatcher = new Dispatcher(Registry::getInstance());
 	$dispatcher->setPath(BASE_PATH);
 	$dispatcher->dispatch();

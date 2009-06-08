@@ -2,9 +2,12 @@
 
 	class TwitterService {
 		
-		private $username;
-		private $password;
+		private $to; //twitteroauth
+		private $token;
 		private $cache;
+		
+		private $request_token;
+		private $request_token_secret;
 		
 		private static $instance = null;
 		
@@ -17,6 +20,32 @@
 		
 		public function __construct() {
 			$this->cache = new Cache_Lite(array('cacheDir' => CACHE_OPTS_DIR, 'lifeTime' => CACHE_OPTS_LIFETIME, 'automaticSerialization' => true));
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY,TWITTER_CONSUMER_SECRET);
+			$tok = $this->to->getRequestToken();
+			$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
+		   $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
+		}
+		
+		public function getAuthorizeURL() {
+			$rVal = '';
+			if (isset($_SESSION['oauth_request_token'])) {
+				$token = $_SESSION['oauth_request_token'];
+				$rVal = $this->to->getAuthorizeURL($token);
+			}
+			return $rVal;
+		}
+		
+		public function getAccessToken() {
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION['oauth_request_token'], $_SESSION['oauth_request_token_secret']);
+	      $this->token = $this->to->getAccessToken();
+			echo '<pre>' . var_dump($this->token) . '</pre>';
+		}
+		
+		public function setTokens($request_token, $request_token_secret) {
+			if (!empty($request_token) && !empty($request_token_secret)) {
+				$this->request_token = $request_token;
+				$this->request_token_secret = $request_token_secret;
+			}
 		}
 		
 		public function login($username, $password) {

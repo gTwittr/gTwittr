@@ -35,6 +35,20 @@
 		public function logout() {
 			
 		}
+		
+		public function callback() {
+			$view = $this->getView('callback');
+			
+			//access key von Twitter in Empfang nehmen
+			$this->twitter_service->getAccessToken();
+			
+	      /* Save the access tokens. Normally these would be saved in a database for future use. */
+	      $_SESSION['oauth_access_token'] = $tok['oauth_token'];
+	      $_SESSION['oauth_access_token_secret'] = $tok['oauth_token_secret'];
+			
+			
+			$view->show();
+		}
 	}
 
 ?>
