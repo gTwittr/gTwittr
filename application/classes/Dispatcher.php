@@ -62,9 +62,9 @@
 				$route = 'index';
 			} else {
 				$route_parts = explode('/',$route);
-				$this->controller = $route_parts[0];
+				$this->controller = strtolower($route_parts[0]);
 				if (isset($route_parts[1])) {
-					$this->action = $route_parts[1];
+					$this->action = strtolower($route_parts[1]);
 				}
 			}
 			
@@ -76,8 +76,7 @@
 				$this->action = 'index';
 			}
 			
-			$this->file = $this->file . '/' . $this->controller . 'Controller.php';
-			
+			$this->file = $this->file . '/' . ucfirst($this->controller) . 'Controller.php';
 		}
 		
 	}
