@@ -49,7 +49,8 @@
 			$firephp = FirePHP::getInstance(true);
 			$firephp->group('TwitterService->getAccessToken');
 			$firephp->log($_SESSION['oauth_request_token'], 'RequestToken');
-			$firephp->log($_SESSION['oauth_request_token_secret'], 'RequestTokenSecret');			
+			$firephp->log($_SESSION['oauth_request_token_secret'], 'RequestTokenSecret');
+			die();		
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION['oauth_request_token'], $_SESSION['oauth_request_token_secret']);
 	      $this->token = $this->to->getAccessToken();
 			$firephp->log($this->token, 'getAccessToken - Response');
