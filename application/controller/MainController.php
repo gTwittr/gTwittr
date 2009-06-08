@@ -41,7 +41,7 @@
 			
 			//access key von Twitter in Empfang nehmen
 			$this->twitter_service->getAccessToken();
-			$view->data->$this->twitter_service->verifyCredentials()
+			$view->data = $this->twitter_service->verifyCredentials()
 			$view->show();
 		}
 		
