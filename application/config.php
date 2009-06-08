@@ -12,9 +12,7 @@
 	define('SESSION_NAME','geotwitter_session');
 	
 	define('HOST_NAME',$_SERVER['HTTP_HOST']);
-	
-	//oauth
-	define('TWITTER_CONSUMER_KEY','pGSROjv5erXNwwNByH5G1w');
-	define('TWITTER_CONSUMER_SECRET','QGi2YqdCXCx0AWXzFV9RA84kdJuhhKuLD2bTxApHWo');
+
+	include('tokens.php');
 	
 ?>

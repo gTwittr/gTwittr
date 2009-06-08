@@ -28,6 +28,8 @@
 	define('CACHE_OPTS_DIR','/tmp/');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
+	$debug = '23';
+	
 	session_name(SESSION_NAME);
 	session_start();
 	

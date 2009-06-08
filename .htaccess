@@ -4,8 +4,11 @@ RewriteBase /
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+
+#RewriteRule ^(.*)$ index.php?route=$1
 #redirect all pages to the index
 RewriteRule ^(.*)\.(html|kml|json)$ index.php?route=$1&ctype=$2 [QSA] [L]
+#RewriteRule ^(.*)(\.(html|kml|json))$ index.php?route=$1&ctype=$2 [QSA] [L]
 #map all errormessage to the error module
 ErrorDocument 404 ./index.php?module=error&error_code=404
 ErrorDocument 403 ./index.php?module=error&error_code=403

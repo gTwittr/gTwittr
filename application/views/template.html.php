@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="/public/stylesheets/application.css" />	
 </head>
 <body>
+	
 	<div id="body">
 		<?php 
 			//pfad, der über das ViewTemplate aufgelöst wurde inkludieren

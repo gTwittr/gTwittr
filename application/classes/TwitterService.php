@@ -6,8 +6,8 @@
 		private $token;
 		private $cache;
 		
-		private $request_token;
-		private $request_token_secret;
+		private $access_token;
+		private $access_token_secret;
 		
 		private static $instance = null;
 		
@@ -21,43 +21,63 @@
 		public function __construct() {
 			$this->cache = new Cache_Lite(array('cacheDir' => CACHE_OPTS_DIR, 'lifeTime' => CACHE_OPTS_LIFETIME, 'automaticSerialization' => true));
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY,TWITTER_CONSUMER_SECRET);
-			//$tok = $this->to->getRequestToken();
-			//$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
-		   //$_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
 		}
 		
 		public function getAuthorizeURL() {
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('TwitterService->getAuthorizeURL');
+			//RequestToken anfordern
+			$tok = $this->to->getRequestToken();
+			$firephp->log($tok, 'RequestToken');
+			//RequestToken und RequestTokenSecret in Session Speichern
+			$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
+		   $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
+			
 			$rVal = '';
 			if (isset($_SESSION['oauth_request_token'])) {
 				$token = $_SESSION['oauth_request_token'];
+				$firephp->log($token,'request_token');
+				//AuthorizeURL anfordern
 				$rVal = $this->to->getAuthorizeURL($token);
+				$firephp->log($rVal,'authorize_url');
 			}
+			$firephp->groupEnd();
 			return $rVal;
 		}
 		
 		public function getAccessToken() {
-			echo '<pre>RequestToken: ' . $_SESSION['oauth_request_token'] . '</pre>';
-			echo '<pre>RequestTokenSecret: ' . $_SESSION['oauth_request_token_secret'] . '</pre>';			
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('TwitterService->getAccessToken');
+			$firephp->log($_SESSION['oauth_request_token'], 'RequestToken');
+			$firephp->log($_SESSION['oauth_request_token_secret'], 'RequestTokenSecret');			
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION['oauth_request_token'], $_SESSION['oauth_request_token_secret']);
 	      $this->token = $this->to->getAccessToken();
-			echo '<pre>Token: ' . var_dump($this->token) . '</pre>';
+			$firephp->log($this->token, 'getAccessToken - Response');
 			$_SESSION['oauth_access_token'] = $this->token['oauth_token'];
 	      $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
-			echo '<pre>AccessToken: ' . $_SESSION['oauth_access_token'] . '</pre>';
-			echo '<pre>AccessTokenSecret: ' . $_SESSION['oauth_access_token_secret'] . '</pre>';
+			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
+			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
+			$firephp->groupEnd();
 		}
 		
-		public function setTokens($request_token, $request_token_secret) {
-			if (!empty($request_token) && !empty($request_token_secret)) {
-				$this->request_token = $request_token;
-				$this->request_token_secret = $request_token_secret;
+		public function setTokens($access_token, $access_token_secret) {
+			if (!empty($access_token) && !empty($access_token_secret)) {
+				$this->access_token = $access_token;
+				$this->access_token_secret = $access_token_secret;
+				$this->token = new TwitterOAuth($consumer_key, $consumer_secret, $this->access_token, $this->access_token_secret);
 			}
 		}
 		
+		/*
 		public function login($username, $password) {
 			$this->username = $username;
 			$this->password = $password;
 			return $this->callTwitter('http://twitter.com/account/verify_credentials');
+		}
+		*/
+		
+		public function verifyCredentials() {
+			return $this->token->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
 		}
 		
 		private function callTwitter($url) {

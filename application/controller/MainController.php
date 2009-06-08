@@ -44,6 +44,22 @@
 			
 			$view->show();
 		}
+		
+		public function mockAccessTokens() {
+			$view = $this->getView('mockAccessTokens');
+			
+			
+			
+			$view->show();
+		}
+		
+		public function doMockAccessTokens() {
+			$accessToken = $_GET['accessToken'];
+			$accessTokenSecret = $_GET['accessTokenSecret'];
+			$this->twitter_service->setTokens($accessToken, $accessTokenSecret);
+			echo '<pre>' . var_dump($this->twitter_service->verifyCredentials()) . '</pre>'; 
+		}
+		
 	}
 
 ?>

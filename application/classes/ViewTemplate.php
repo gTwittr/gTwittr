@@ -30,6 +30,9 @@
 		
 		public function show() {
 			
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('ViewTemplate->show');
+			
 			$templatePath = BASE_PATH . '/views/template.' . $this->ctype . '.php';
 			
 			if (!file_exists($templatePath) || !is_readable($templatePath)) {
@@ -42,6 +45,8 @@
 				throw new Exception('View with name ' . $this->name . ' and content-type ' . $this->ctype . ' cannot be used');
 			}
 			$this->generateHeader();
+			
+			$firephp->log('Path: ' . $path);
 			
 			//an dieser Stelle xslt benutzen um aus dem template die datei zu erstellen.
 			
@@ -59,6 +64,8 @@
 			
 			include $templatePath;
 			//include BASE_PATH . '/views/template.' . $this->ctype . '.php';
+			
+			$firephp->groupEnd();
 		}
 		
 		public function setName($name) {
