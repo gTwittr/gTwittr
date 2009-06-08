@@ -79,7 +79,7 @@
 		*/
 		
 		public function verifyCredentials() {
-			return $this->token->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
+			return $this->to->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
 		}
 		
 		private function callTwitter($url) {
