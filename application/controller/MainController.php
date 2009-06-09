@@ -40,9 +40,9 @@
 			$view = $this->getView('callback');
 			
 			//access key von Twitter in Empfang nehmen
-			/*$this->twitter_service->getAccessToken();
-			$view->user_data = $this->twitter_service->verifyCredentials();'*/
-			
+			$this->twitter_service->getAccessToken();
+			$view->user_data = $this->twitter_service->verifyCredentials();
+			/*
 			$testData = '{		"time_zone":"Berlin",
 									"profile_link_color":"333",
 									"description":"",
@@ -81,7 +81,7 @@
 			$profile_data = json_decode($testData);
 			
 			$view->user_data = $profile_data;
-			
+			*/
 			$view->show();
 		}
 		
