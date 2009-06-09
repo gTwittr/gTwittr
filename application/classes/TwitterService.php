@@ -96,21 +96,22 @@
 		}
 		
 		public function getPublicTimelineTweets() {
-			$result = $this->callTwitter('http://twitter.com/statuses/public_timeline');
-			$rVal = array();
 			
+			//$result = $this->callTwitter('http://twitter.com/statuses/public_timeline');
+			$rVal = array();
+			/*
 			foreach($result as $t) {
 				
 				$tweet = new Tweet($t->text,LocationService::getInstance()->findLocation($t->user->location));
 				
 				array_push($rVal, $tweet);
 			}
-			
+			*/
 			return $rVal;
 		}
 		
 		public function isAuthenticated() {
-			return $this->access_token != null && $this->access_token_secret != null;
+			return $this->access_token !== NULL && $this->access_token_secret !== NULL;
 		}
 		
 		
