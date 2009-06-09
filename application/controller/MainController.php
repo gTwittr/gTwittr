@@ -45,7 +45,7 @@
 			if ($view->authenticated) {
 				$view->user_data = $this->twitter_service->verifyCredentials();	
 			}
-			die($view->authenticated);			
+			
 			/*
 			$testData = '{		"time_zone":"Berlin",
 									"profile_link_color":"333",
@@ -88,6 +88,7 @@
 			*/
 			
 			$view->show();
+			die($view->authenticated);
 		}
 		
 		public function mockAccessTokens() {
