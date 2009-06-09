@@ -54,6 +54,7 @@
 			$firephp->log($this->token, 'getAccessToken - Response');
 			$this->access_token = $_SESSION['oauth_access_token'] = $this->token['oauth_token'];
 	    $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $this->access_token, $this->access_token_secret);
 			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
 			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
 			$firephp->groupEnd();
