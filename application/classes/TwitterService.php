@@ -24,11 +24,6 @@
 		}
 		
 		public function getAuthorizeURL() {
-			//url schon mal geholt?
-			if (isset($_SESSION['authorize_url'])) {
-				return $_SESSION['authorize_url'];
-			}
-			
 			$firephp = FirePHP::getInstance(true);
 			$firephp->group('TwitterService->getAuthorizeURL');
 			//RequestToken anfordern
@@ -43,8 +38,6 @@
 				$firephp->log($token,'request_token');
 				//AuthorizeURL mit Requesttoken anfordern
 				$rVal = $this->to->getAuthorizeURL($token);
-				//url speichern
-				$_SESSION['authorize_url'] = $rVal;
 				$firephp->log($rVal,'authorize_url');
 			}
 			$firephp->groupEnd();
