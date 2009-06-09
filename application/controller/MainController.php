@@ -82,6 +82,9 @@
 			
 			$view->user_data = $profile_data;
 			*/
+			
+			$view->authenticated = $this->twitter_service->isAuthenticated();
+			
 			$view->show();
 		}
 		
