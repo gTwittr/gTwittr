@@ -39,6 +39,7 @@
 				//AuthorizeURL mit Requesttoken anfordern
 				$rVal = $this->to->getAuthorizeURL($token);
 				$firephp->log($rVal,'authorize_url');
+				$firephp->log('test');
 			}
 			$firephp->groupEnd();
 			return $rVal;
