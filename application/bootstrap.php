@@ -25,7 +25,7 @@
 		}
 	}
 	
-	define('CACHE_OPTS_DIR','/tmp/');
+	define('CACHE_OPTS_DIR','./tmp');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
 	session_name(SESSION_NAME);
