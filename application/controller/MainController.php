@@ -43,7 +43,7 @@
 			$view->authenticated = $this->twitter_service->getAccessToken();
 
 			if ($view->authenticated) {
-				$view->user_data = $this->twitter_service->verifyCredentials();	
+				$view->user_data = json_decode($this->twitter_service->verifyCredentials());	
 			}
 			
 			/*
