@@ -534,8 +534,11 @@ class Cache_Lite
     */
     function raiseError($msg, $code)
     {
+				/*
         include_once('PEAR.php');
         return PEAR::raiseError($msg, $code, $this->_pearErrorMode);
+				*/
+				throw new Exception($msg . ' -code: ' . $code);
     }
     
     /**

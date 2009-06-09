@@ -10,7 +10,11 @@
 			Liefert Tweets aus dem 'latest' Tweet
 		**/
 		public function latest() {
-			echo 'test';
+			$view = $this->getView('latest');
+			
+			
+			
+			$view->show();
 		}
 		
 	}

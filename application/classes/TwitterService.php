@@ -86,6 +86,7 @@
 			return $this->to->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
 		}
 		
+		/*
 		private function callTwitter($url) {
 			//json daten erwarten
 			$url = $url . '.json';
@@ -96,20 +97,23 @@
 			$result = curl_exec($curl);
 			return json_decode($result);
 		}
+		*/
+		
+		public function callTwitter($url) {
+			
+		}
 		
 		public function getPublicTimelineTweets() {
+			return $this->to->OAuthRequest('https://twitter.com/statuses/public_timeline.json', array(), 'GET');
+			/*$rVal = array();
 			
-			//$result = $this->callTwitter('http://twitter.com/statuses/public_timeline');
-			$rVal = array();
-			/*
 			foreach($result as $t) {
 				
 				$tweet = new Tweet($t->text,LocationService::getInstance()->findLocation($t->user->location));
 				
 				array_push($rVal, $tweet);
 			}
-			*/
-			return $rVal;
+			return $rVal;*/
 		}
 		
 		public function isAuthenticated() {
