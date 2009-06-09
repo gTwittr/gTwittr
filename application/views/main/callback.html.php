@@ -5,3 +5,4 @@
 <?php } else { ?>
 	Du konntest leider nicht authentisiert werden...
 <?php } ?>
+<?php die('the end'); ?>
