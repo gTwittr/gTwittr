@@ -38,6 +38,7 @@
 		
 		public function callback() {
 			$view = $this->getView('callback');
+			
 			//access key von Twitter in Empfang nehmen
 			$view->authenticated = $this->twitter_service->getAccessToken();
 			
@@ -87,6 +88,7 @@
 			*/
 			
 			$view->show();
+			die();
 		}
 		
 		public function mockAccessTokens() {
