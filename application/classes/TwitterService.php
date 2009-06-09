@@ -62,6 +62,7 @@
 			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
 			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
 			$firephp->groupEnd();
+			return $this->isAuthenticated();
 		}
 		
 		public function setTokens($access_token, $access_token_secret) {
