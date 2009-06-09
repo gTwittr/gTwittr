@@ -31,6 +31,8 @@
 		public function dispatch() {
 			
 			$firephp = FirePHP::getInstance(true);
+			$firephp->group('Dispatcher->dispatch');
+			
 			$firephp->log('start dispatching');
 			
 			$this->getController();
@@ -50,11 +52,16 @@
 			} else {
 				$action = $this->action;
 			}
+			$firephp->groupEnd();
 			//action ausführen
 			$controller->$action();
 		}
 		
 		private function getController() {
+			
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('Dispatcher->getController');
+			
 			
 			$route = empty($_GET['route']) ? '' : $_GET['route'];
 			
@@ -62,22 +69,29 @@
 				$route = 'index';
 			} else {
 				$route_parts = explode('/',$route);
-				$this->controller = $route_parts[0];
+				$this->controller = strtolower($route_parts[0]);
 				if (isset($route_parts[1])) {
-					$this->action = $route_parts[1];
+					$this->action = strtolower($route_parts[1]);
 				}
 			}
+			
+			$firephp->log('route: ' . $route);
 			
 			if (empty($this->controller)) {
 				$this->controller = 'index';
 			}
 			
+			$firephp->log('controller: ' . $controller);
+			
 			if (empty($this->action)) {
 				$this->action = 'index';
 			}
 			
-			$this->file = $this->file . '/' . $this->controller . 'Controller.php';
+			$firephp->log('action: ' . $action);
 			
+			$this->file = $this->file . '/' . ucfirst($this->controller) . 'Controller.php';
+			
+			$firephp->groupEnd();
 		}
 		
 	}

@@ -2,9 +2,12 @@
 
 	class TwitterService {
 		
-		private $username;
-		private $password;
+		private $to; //twitteroauth
+		private $token;
 		private $cache;
+		
+		private $access_token;
+		private $access_token_secret;
 		
 		private static $instance = null;
 		
@@ -17,12 +20,69 @@
 		
 		public function __construct() {
 			$this->cache = new Cache_Lite(array('cacheDir' => CACHE_OPTS_DIR, 'lifeTime' => CACHE_OPTS_LIFETIME, 'automaticSerialization' => true));
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY,TWITTER_CONSUMER_SECRET);
 		}
 		
+		public function getAuthorizeURL() {
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('TwitterService->getAuthorizeURL');
+			//RequestToken anfordern
+			$tok = $this->to->getRequestToken();
+			$firephp->log($tok, 'RequestToken');
+			//RequestToken und RequestTokenSecret in Session Speichern
+			$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
+		  $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
+			$rVal = '';
+			if (isset($_SESSION['oauth_request_token'])) {
+				$token = $_SESSION['oauth_request_token'];
+				$firephp->log($token,'request_token');
+				//AuthorizeURL mit Requesttoken anfordern
+				$rVal = $this->to->getAuthorizeURL($token);
+				$firephp->log($rVal,'authorize_url');
+			}
+			$firephp->groupEnd();
+			return $rVal;
+		}
+		
+		public function getAccessToken() {
+			$firephp = FirePHP::getInstance(true);
+			$firephp->group('TwitterService->getAccessToken');
+			$firephp->log($_SESSION['oauth_request_token'], 'RequestToken');
+			$firephp->log($_SESSION['oauth_request_token_secret'], 'RequestTokenSecret');		
+			//neuer TwitterOAtuh mit RequestToken und -secret
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION['oauth_request_token'], $_SESSION['oauth_request_token_secret']);
+			//AccessToken anfordern
+			$this->token = $this->to->getAccessToken();
+			$firephp->log($this->token, 'getAccessToken - Response');
+			//accessToken und accessTokenSecret auslesen und speichern
+			$this->access_token = $_SESSION['oauth_access_token'] = $this->token['oauth_token'];
+	    $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
+			//twitterOAuth mit access_token und access_token_secret anlegen
+			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $this->access_token, $this->access_token_secret);
+			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
+			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
+			$firephp->groupEnd();
+			return $this->isAuthenticated();
+		}
+		
+		public function setTokens($access_token, $access_token_secret) {
+			if (!empty($access_token) && !empty($access_token_secret)) {
+				$this->access_token = $access_token;
+				$this->access_token_secret = $access_token_secret;
+				$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_KEY, $this->access_token, $this->access_token_secret);
+			}
+		}
+		
+		/*
 		public function login($username, $password) {
 			$this->username = $username;
 			$this->password = $password;
 			return $this->callTwitter('http://twitter.com/account/verify_credentials');
+		}
+		*/
+		
+		public function verifyCredentials() {
+			return $this->to->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
 		}
 		
 		private function callTwitter($url) {
@@ -37,17 +97,22 @@
 		}
 		
 		public function getPublicTimelineTweets() {
-			$result = $this->callTwitter('http://twitter.com/statuses/public_timeline');
-			$rVal = array();
 			
+			//$result = $this->callTwitter('http://twitter.com/statuses/public_timeline');
+			$rVal = array();
+			/*
 			foreach($result as $t) {
 				
 				$tweet = new Tweet($t->text,LocationService::getInstance()->findLocation($t->user->location));
 				
 				array_push($rVal, $tweet);
 			}
-			
+			*/
 			return $rVal;
+		}
+		
+		public function isAuthenticated() {
+			return $this->access_token !== NULL && $this->access_token_secret !== NULL;
 		}
 		
 		

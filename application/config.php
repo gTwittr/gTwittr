@@ -11,4 +11,8 @@
 	
 	define('SESSION_NAME','geotwitter_session');
 	
+	define('HOST_NAME',$_SERVER['HTTP_HOST']);
+
+	include('tokens.php');
+	
 ?>
