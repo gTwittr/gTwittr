@@ -50,9 +50,8 @@
 			
 			foreach ($this->vars as $key => $value) {
 				$$key = $value;
+				$firephp->log($value,$$key);
 			}
-			
-			die();
 			
 			include $templatePath;
 			//include BASE_PATH . '/views/template.' . $this->ctype . '.php';
