@@ -52,6 +52,8 @@
 				$$key = $value;
 			}
 			
+			die();
+			
 			include $templatePath;
 			//include BASE_PATH . '/views/template.' . $this->ctype . '.php';
 			
