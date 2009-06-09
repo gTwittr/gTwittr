@@ -34,6 +34,7 @@
 			$firephp->group('ViewTemplate->show');
 			
 			$templatePath = BASE_PATH . '/views/template.' . $this->ctype . '.php';
+			$firephp->log($templatePath, 'TemplatePath');
 			
 			if (!file_exists($templatePath) || !is_readable($templatePath)) {
 				throw new Exception('Cannot read template');
@@ -48,11 +49,12 @@
 			
 			$firephp->log('Path: ' . $path);
 			
+			$firephp->log('copy vars');
 			foreach ($this->vars as $key => $value) {
 				$$key = $value;
 				$firephp->log($value,$$key);
 			}
-			
+			$firephp->log('finished copy vars');
 			include $templatePath;
 			//include BASE_PATH . '/views/template.' . $this->ctype . '.php';
 			

@@ -10,7 +10,7 @@
 	<div id="body">
 		<?php
 			//pfad, der über das ViewTemplate aufgelöst wurde inkludieren
-			include $path; 
+			include $path;
 		?>
 	</div>
 </body>
