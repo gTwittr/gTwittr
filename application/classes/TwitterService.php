@@ -24,6 +24,11 @@
 		}
 		
 		public function getAuthorizeURL() {
+			//url schon mal geholt?
+			if (isset($_SESSION['authorize_url'])) {
+				return $_SESSION['authorize_url'];
+			}
+			
 			$firephp = FirePHP::getInstance(true);
 			$firephp->group('TwitterService->getAuthorizeURL');
 			//RequestToken anfordern
@@ -36,8 +41,10 @@
 			if (isset($_SESSION['oauth_request_token'])) {
 				$token = $_SESSION['oauth_request_token'];
 				$firephp->log($token,'request_token');
-				//AuthorizeURL anfordern
+				//AuthorizeURL mit Requesttoken anfordern
 				$rVal = $this->to->getAuthorizeURL($token);
+				//url speichern
+				$_SESSION['authorize_url'] = $rVal;
 				$firephp->log($rVal,'authorize_url');
 			}
 			$firephp->groupEnd();
@@ -49,11 +56,15 @@
 			$firephp->group('TwitterService->getAccessToken');
 			$firephp->log($_SESSION['oauth_request_token'], 'RequestToken');
 			$firephp->log($_SESSION['oauth_request_token_secret'], 'RequestTokenSecret');		
+			//neuer TwitterOAtuh mit RequestToken und -secret
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION['oauth_request_token'], $_SESSION['oauth_request_token_secret']);
+			//AccessToken anfordern
 			$this->token = $this->to->getAccessToken();
 			$firephp->log($this->token, 'getAccessToken - Response');
+			//accessToken und accessTokenSecret auslesen und speichern
 			$this->access_token = $_SESSION['oauth_access_token'] = $this->token['oauth_token'];
 	    $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
+			//twitterOAuth mit access_token und access_token_secret anlegen
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $this->access_token, $this->access_token_secret);
 			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
 			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
