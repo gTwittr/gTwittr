@@ -52,7 +52,7 @@
 			$firephp->log('copy vars');
 			foreach ($this->vars as $key => $value) {
 				$$key = $value;
-				$firephp->log($value,$$key);
+				$firephp->log($value,$key);
 			}
 			$firephp->log('finished copy vars');
 			include $templatePath;
