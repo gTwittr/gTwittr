@@ -41,11 +41,11 @@
 			
 			//access key von Twitter in Empfang nehmen
 			$view->authenticated = $this->twitter_service->getAccessToken();
-			die($view->authenticated);
+
 			if ($view->authenticated) {
 				$view->user_data = $this->twitter_service->verifyCredentials();	
 			}
-			
+			die($view->authenticated);			
 			/*
 			$testData = '{		"time_zone":"Berlin",
 									"profile_link_color":"333",
