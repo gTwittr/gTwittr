@@ -41,7 +41,7 @@
 			
 			//access key von Twitter in Empfang nehmen
 			$view->authenticated = $this->twitter_service->getAccessToken();
-			
+			die($view->authenticated);
 			if ($view->authenticated) {
 				$view->user_data = $this->twitter_service->verifyCredentials();	
 			}
@@ -88,7 +88,6 @@
 			*/
 			
 			$view->show();
-			die();
 		}
 		
 		public function mockAccessTokens() {
