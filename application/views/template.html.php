@@ -3,13 +3,12 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<title><?php echo $this->action; ?></title>
+	<title>geWittr</title>
 	<link rel="stylesheet" type="text/css" href="/public/stylesheets/application.css" />	
 </head>
 <body>
-	
 	<div id="body">
-		<?php 
+		<?php
 			//pfad, der über das ViewTemplate aufgelöst wurde inkludieren
 			include $path; 
 		?>

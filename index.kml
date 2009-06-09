@@ -7,7 +7,7 @@
 			<flyToView>1</flyToView>
 			<Link>
 				<refreshMode>OnExpire</refreshMode>
-				<href>http://<?php echo HOST_NAME; ?>/main/login.kml</href>
+				<href>http://www.gewittr.local/main/login.kml</href>
 			</Link>
 		</NetworkLink>
 	</Document>

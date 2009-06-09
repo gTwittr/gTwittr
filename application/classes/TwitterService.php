@@ -31,8 +31,7 @@
 			$firephp->log($tok, 'RequestToken');
 			//RequestToken und RequestTokenSecret in Session Speichern
 			$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
-		   $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
-			
+		  $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
 			$rVal = '';
 			if (isset($_SESSION['oauth_request_token'])) {
 				$token = $_SESSION['oauth_request_token'];
@@ -54,7 +53,7 @@
 			$this->token = $this->to->getAccessToken();
 			$firephp->log($this->token, 'getAccessToken - Response');
 			$this->access_token = $_SESSION['oauth_access_token'] = $this->token['oauth_token'];
-	      $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
+	    $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
 			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
 			$firephp->log($_SESSION['oauth_access_token_secret'], 'AccessTokenSecret');
 			$firephp->groupEnd();
@@ -64,7 +63,7 @@
 			if (!empty($access_token) && !empty($access_token_secret)) {
 				$this->access_token = $access_token;
 				$this->access_token_secret = $access_token_secret;
-				$this->token = new TwitterOAuth($consumer_key, $consumer_secret, $this->access_token, $this->access_token_secret);
+				$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_KEY, $this->access_token, $this->access_token_secret);
 			}
 		}
 		
@@ -103,6 +102,10 @@
 			}
 			
 			return $rVal;
+		}
+		
+		public function isAuthenticated() {
+			return $this->access_token != null && $this->access_token_secret != null;
 		}
 		
 		

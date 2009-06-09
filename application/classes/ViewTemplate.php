@@ -48,19 +48,9 @@
 			
 			$firephp->log('Path: ' . $path);
 			
-			//an dieser Stelle xslt benutzen um aus dem template die datei zu erstellen.
-			
-			/*
-			$doc = new DOMDocument();
-			$doc->load($path);
-			$xslt_proc = new XsltProcessor();
-			$xslt_proc->importStyleSheet($doc);
-			*/
-			
 			foreach ($this->vars as $key => $value) {
 				$$key = $value;
 			}
-			
 			
 			include $templatePath;
 			//include BASE_PATH . '/views/template.' . $this->ctype . '.php';

@@ -6,8 +6,13 @@
 			$view = $this->getView('index');
 			//TwitterService::getInstance()->getPublicTimelineTweets();
 			
-			$view->authURL = $this->twitter_service->getAuthorizeURL();
+			$authenticated = false;
 			
+			if (!$authenticated) {
+				$view->authURL = $this->twitter_service->getAuthorizeURL();
+			}
+			
+			$view->authenticated = $authenticated;
 			$view->show();
 		}
 		
