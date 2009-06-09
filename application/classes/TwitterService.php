@@ -69,7 +69,7 @@
 			if (!empty($access_token) && !empty($access_token_secret)) {
 				$this->access_token = $access_token;
 				$this->access_token_secret = $access_token_secret;
-				$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_KEY, $this->access_token, $this->access_token_secret);
+				$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $this->access_token, $this->access_token_secret);
 			}
 		}
 		
