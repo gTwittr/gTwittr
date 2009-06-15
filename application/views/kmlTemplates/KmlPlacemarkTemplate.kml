@@ -1,0 +1,9 @@
+<Placemark>
+    <name>@name@</name>
+    <description>
+      @description@
+    </description>
+    <Point>
+      <coordinates>@longitude@,@latitude@,@altitude@</coordinates>
+    </Point>
+</Placemark>

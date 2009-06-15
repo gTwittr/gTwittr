@@ -24,7 +24,7 @@
 			}
 		}
 		
-		public function getTokens($twitterId = 0) {
+		public function getTokens($sessionId = '') {
 			
 			if ( ! $this->db ) {
 				die("Error: no database connection!");
@@ -34,10 +34,9 @@
 
 			$query = "SELECT * FROM userTwitterAuth;";
 	 
-			if ( $twitterId != 0 ) {
-				$query = "SELECT * FROM userTwitterAuth WHERE twitterId = $twitterId;";	
+			if ( strlen($sessionId) > 0  ) {
+				$query = "SELECT * FROM userTwitterAuth WHERE sessionId = '$sessionId';";	
 			}
-			
 			
 			$result = $this->db->query($query);
 	
@@ -66,13 +65,16 @@
 			
 			$result = $this->db->query($checkQuery);
 			
-			$query = "INSERT INTO userTwitterAuth (twitterId, token, secret) VALUES ($twitterId, '$token', '$secret')";
+			$sessionId = uniqid();
+			
+			$query = "INSERT INTO userTwitterAuth (sessionId, twitterId, token, secret) VALUES ('$sessionId', $twitterId, '$token', '$secret')";
 			if ( $result->numRows() > 0 ) {
-				$query = "UPDATE userTwitterAuth SET token='$token', secret='$secret' WHERE twitterId=$twitterId;";
+				$query = "UPDATE userTwitterAuth SET sessionId='$sessionId' token='$token', secret='$secret' WHERE twitterId=$twitterId;";
 			}
 			
 			$this->db->query($query);
 			
+			return $sessionId;
 		}
 		
 		private function checkTableExists($tableName) {
@@ -91,12 +93,12 @@
 		private function createTokenTableIfNotExists() {
 			if ( ! $this->checkTableExists('userTwitterAuth') ) {
 				$this->db->query("BEGIN;
-				        CREATE TABLE userTwitterAuth (twitterId INTEGER PRIMARY KEY, token TEXT, secret TEXT);
+				        CREATE TABLE userTwitterAuth (sessionId TEXT PRIMARY KEY, twitterId INTEGER, token TEXT, secret TEXT);
 				        COMMIT;");
 				//TESTING: insert some test data
 				$this->db->query("BEGIN;
-				        INSERT INTO userTwitterAuth (token, secret) VALUES('AABBCCDDEEFFGGHHII', 'JJKKLLMMNNOO');
-				        INSERT INTO userTwitterAuth (token, secret) VALUES('PPQQRRSSTTUUVVWWXX', 'YYZZAABBCCDD');
+				        INSERT INTO userTwitterAuth (sessionId, twitterId, token, secret) VALUES('" . uniqid() . "', 2087924463, 'AABBCCDDEEFFGGHHII', 'JJKKLLMMNNOO');
+				        INSERT INTO userTwitterAuth (sessionId, twitterId, token, secret) VALUES('" . uniqid() . "', 2087286689, 'PPQQRRSSTTUUVVWWXX', 'YYZZAABBCCDD');
 				        COMMIT;");
 			}
 		}
