@@ -3,8 +3,9 @@
 	class MainController extends AbstractController {
 		
 		public function index() {
-		}
 		
+		}
+		/*
 		public function login() {
 			$view = $this->getView('login');
 			
@@ -28,19 +29,25 @@
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 			
-			
 			$data = $this->twitter_service->login($username,$password);
 		}
 		
 		public function logout() {
 			
 		}
+		*/
 		
+		/**
+			*
+			* Wird als Callback von Twitter am Ende des Authorisierungsvorgangs aufgerufen,
+			* die AccessTokens werden aus der Session ausgelesen.
+			*
+			**/
 		public function callback() {
 			$view = $this->getView('callback');
 			//access key von Twitter in Empfang nehmen
 			$view->authenticated = $this->twitter_service->getAccessToken();
-			
+
 			if ($view->authenticated) {
 				$view->user_data = $this->twitter_service->verifyCredentials();	
 			}
@@ -87,6 +94,7 @@
 			*/
 			
 			$view->show();
+			die($view->authenticated);
 		}
 		
 		public function mockAccessTokens() {

@@ -4,14 +4,12 @@
 		
 		public function index() {
 			$view = $this->getView('index');
-			//TwitterService::getInstance()->getPublicTimelineTweets();
-			
+			//ist der Nutzer bereits eingeloggt?
 			$authenticated = $this->twitter_service->isAuthenticated();
-			
+			//ansonsten Link zum Authorisieren erstellen
 			if (!$authenticated) {
 				$view->authURL = $this->twitter_service->getAuthorizeURL();
 			}
-			
 			$view->authenticated = $authenticated;
 			$view->show();
 		}
