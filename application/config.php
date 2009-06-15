@@ -10,6 +10,7 @@
 	define('ENVIRONMENT',DEVELOPMENT);
 	
 	define('SESSION_NAME','geotwitter_session');
+	define('GEWITTR_SESSION_PARAM_NAME','gws');
 	
 	define('HOST_NAME',$_SERVER['HTTP_HOST']);
 

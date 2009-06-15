@@ -28,10 +28,19 @@
 	define('CACHE_OPTS_DIR','./tmp');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
+	if (ENVIRONMENT == DEVELOPMENT) {
+		define('GWS_SESSION_ID','4a36337484b7a');	
+	} else {
+		define('GWS_SESSION_ID',$_GET[GEWITTR_SESSION_PARAM_NAME]);
+	}
+	
+	
 	session_name(SESSION_NAME);
 	session_start();
 	
 	ob_start();
+
+	Identity::initIdentity();
 
 	$dispatcher = new Dispatcher(Registry::getInstance());
 	$dispatcher->setPath(BASE_PATH);

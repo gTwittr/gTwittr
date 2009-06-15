@@ -35,23 +35,23 @@
 			$query = "SELECT * FROM userTwitterAuth;";
 	 
 			if ( strlen($sessionId) > 0  ) {
-				$query = "SELECT * FROM userTwitterAuth WHERE sessionId = '$sessionId';";	
+				$query = "SELECT * FROM userTwitterAuth WHERE sessionId = '$sessionId';";
 			}
 			
 			$result = $this->db->query($query);
-	
+			
 			$resArray = array();
 
 			while($authToken = $result->fetch(SQLITE_ASSOC)){
 				array_push($resArray, $authToken);
 			}
 			
-			$json = json_encode($resArray);
+			//$json = json_encode($resArray);
 			
 			// not generally needed as PHP will destroy the connection
 			unset($db);
 			
-			return $json;
+			return $resArray;
 		}
 		
 		public function setToken($twitterId, $token, $secret) {

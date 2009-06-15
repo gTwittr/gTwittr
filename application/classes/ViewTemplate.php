@@ -90,5 +90,25 @@
 			return strcmp($this->ctype,self::JSON_FILE) == 0;
 		}
 	}
+	
+	function link_tag($title,$href) {
+		$parts = preg_split('/\?/',$href);
+		
+		$session_param_name = GEWITTR_SESSION_PARAM_NAME;
+		$session_param_value = Identity::getIdentity()->getSessionId();
+		$session_param = "$session_param_name=$session_param_value";
+		
+		if (!empty($parts) && count($parts) == 2) {
+			$base_path = $parts[0];
+			$parameters = $parts[1];
+			$params = preg_split('/&/',$parameters);
+			array_push($params,$session_param);
+			$parameters = implode('&',$params);
+			$href = "$base_path?$parameters";
+		} else if (count($parts) == 1) {
+			$href = "$parts[0]?$session_param";
+		}
+		return "<a href=\"$href\">$title</a>";
+	}
 
 ?>

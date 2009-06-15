@@ -23,8 +23,10 @@
 	echo $kmlDocument->generate();
 	*/
 	
-	$json = PersistanceService::getInstance()->getTokens();
-	$authTokens = json_decode($json);
+//	$json = PersistanceService::getInstance()->getTokens();
+//	$authTokens = json_decode($json);
+	
+	$authTokens = PersistanceService::getInstance()->getTokens();
 	
 	$firephp = FirePHP::getInstance(true);
 	$firephp->log('hallo');
@@ -45,10 +47,10 @@
 			foreach ( $authTokens as $userAuthToken ) {
 		?>
 		<tr>
-			<td><?php echo $userAuthToken->sessionId; ?></td>
-			<td><?php echo $userAuthToken->twitterId; ?></td>
-			<td><?php echo $userAuthToken->token; ?></td>
-			<td><?php echo $userAuthToken->secret; ?></td>
+			<td><?php echo $userAuthToken['sessionId']; ?></td>
+			<td><?php echo $userAuthToken['twitterId']; ?></td>
+			<td><?php echo $userAuthToken['token']; ?></td>
+			<td><?php echo $userAuthToken['secret']; ?></td>
 		</tr>
 		<?php
 			}

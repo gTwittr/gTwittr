@@ -2,7 +2,7 @@
 
 	class TwitterService {
 		
-		private $to; //twitteroauth
+		private $to;
 		private $token;
 		private $cache;
 		
@@ -13,14 +13,24 @@
 		
 		public static function getInstance() {
 			if (self::$instance == null) {
-				self::$instance = new TwitterService();
+				$access_token = Identity::getIdentity()->getAccessToken();
+				$access_token_secret = Identity::getIdentity()->getAccessToken();
+				if (ENVIRONMENT == DEVELOPMENT) {
+					$access_token = TEST_USER;
+					$access_token_secret = TEST_PASS;
+				}
+				self::$instance = new TwitterService($access_token,$access_token_secret);
 			}
 			return self::$instance;
 		}
 		
-		public function __construct() {
+		public function __construct($access_token = '', $access_token_secret = '') {
 			$this->cache = new Cache_Lite(array('cacheDir' => CACHE_OPTS_DIR, 'lifeTime' => CACHE_OPTS_LIFETIME, 'automaticSerialization' => true));
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY,TWITTER_CONSUMER_SECRET);
+			if (!empty($access_token) && !empty($access_token_secret)) {
+				$this->access_token = $access_token;
+				$this->access_token_secret = $access_token_secret;
+			}
 		}
 		
 		public function getAuthorizeURL() {
@@ -81,7 +91,7 @@
 		public function callTwitter($url, $method = 'GET') {
 			if (ENVIRONMENT == DEVELOPMENT) {
 				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_USERPWD, TEST_USER . ':' . TEST_PASS);
+				curl_setopt($curl, CURLOPT_USERPWD, $this->access_token . ':' . $this->access_token_secret);
 				curl_setopt($curl, CURLOPT_URL, $url);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 				$result = curl_exec($curl);
@@ -104,9 +114,6 @@
 		}
 		
 		public function isAuthenticated() {
-			if (ENVIRONMENT == DEVELOPMENT) {
-				return true;
-			}
 			return $this->access_token !== NULL && $this->access_token_secret !== NULL;
 		}
 		
