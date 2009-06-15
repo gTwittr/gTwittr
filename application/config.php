@@ -15,4 +15,10 @@
 
 	include('tokens.php');
 	
+	if (ENVIRONMENT == DEVELOPMENT) {
+		
+		include('twitter_test_login.php');
+		
+	}
+	
 ?>

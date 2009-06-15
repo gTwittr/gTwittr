@@ -74,38 +74,25 @@
 			}
 		}
 		
-		/*
-		public function login($username, $password) {
-			$this->username = $username;
-			$this->password = $password;
-			return $this->callTwitter('http://twitter.com/account/verify_credentials');
-		}
-		*/
-		
 		public function verifyCredentials() {
-			return $this->to->OAuthRequest('https://twitter.com/account/verify_credentials.json', array(), 'GET');
+			return $this->callTwitter('https://twitter.com/account/verify_credentials.json');
 		}
 		
-		/*
-		private function callTwitter($url) {
-			//json daten erwarten
-			$url = $url . '.json';
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_USERPWD, $this->username . ':' . $this->password);
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			$result = curl_exec($curl);
-			return json_decode($result);
-		}
-		*/
-		
-		public function callTwitter($url) {
-			
+		public function callTwitter($url, $method = 'GET') {
+			if (ENVIRONMENT == DEVELOPMENT) {
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_USERPWD, TEST_USER . ':' . TEST_PASS);
+				curl_setopt($curl, CURLOPT_URL, $url);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				$result = curl_exec($curl);
+				return json_decode($result);
+			}
+			return json_decode($this->to->OAuthRequest($url, array(), $method));
 		}
 		
 		public function getPublicTimelineTweets() {
-			return $this->to->OAuthRequest('https://twitter.com/statuses/public_timeline.json', array(), 'GET');
-			/*$rVal = array();
+			$result = $this->callTwitter('https://twitter.com/statuses/public_timeline.json');
+			$rVal = array();
 			
 			foreach($result as $t) {
 				
@@ -113,10 +100,13 @@
 				
 				array_push($rVal, $tweet);
 			}
-			return $rVal;*/
+			return $rVal;
 		}
 		
 		public function isAuthenticated() {
+			if (ENVIRONMENT == DEVELOPMENT) {
+				return true;
+			}
 			return $this->access_token !== NULL && $this->access_token_secret !== NULL;
 		}
 		
