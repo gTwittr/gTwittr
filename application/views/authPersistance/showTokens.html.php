@@ -17,6 +17,8 @@
 	$placemark = new KmlElementGenerator('Placemark');
 	$placemark->setValues($placeMap);
 	
+	
+	
 	$kmlDocument = new KmlElementGenerator('Document');
 	$kmlDocument->setValue('content', $placemark->generate());
 	

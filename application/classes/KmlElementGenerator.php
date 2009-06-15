@@ -19,11 +19,11 @@ class KmlElementGenerator {
 		fclose ($handle);
 	}
 
-	function set($name, $value) {
+	function setValue($name, $value) {
 		$this->templateContent = str_replace("@$name@", $value, $this->templateContent);
 	}
 	
-	function setValuesValue($map) {
+	function setValues($map) {
 		foreach ($map as $key => $value) {
 			$this->setValue($key, $value);
 		}
