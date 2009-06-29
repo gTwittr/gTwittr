@@ -3,3 +3,4 @@ geWittrData.sqlite
 tokens_and_login.txt
 application/tokens.php
 application/twitter_test_login.php
+cache_*
