@@ -30,7 +30,7 @@
 	$kmlDocument = new KmlElementGenerator('Document');
 	$kmlDocument->setValue('content', $placemark->generate() . $overlay->generate() . $line->generate());
 	
-	echo $kmlDocument->generate();
+	//echo $kmlDocument->generate();
 	
 	$json = PersistanceService::getInstance()->getTokens();
 	$authTokens = json_decode($json);
@@ -40,6 +40,9 @@
 	
 	$firephp->log($json);
 	$firephp->log($authTokens);
+	
+	
+	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
 ?>
 
 <div id="addToken_form">
