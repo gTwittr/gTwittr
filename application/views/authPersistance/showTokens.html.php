@@ -5,7 +5,7 @@
 </script>
 <?php
 	
-	/*
+	
 	$placeMap = array (
 					"name" => "Testplace",
 					"description" => "Test description",
@@ -17,13 +17,20 @@
 	$placemark = new KmlElementGenerator('Placemark');
 	$placemark->setValues($placeMap);
 	
+	$overlay = new KmlElementGenerator('ScreenOverlay');
+	$overlay->setValue('name', 'testOverlay');
+	$overlay->setValue('icon', 'http://www.panten.org/files/testOverlay.jpg');
 	
+	$line = new KmlElementGenerator('Line');
+	$line->setValue('name', 'TestLine');
+	$line->setValue('description', 'Test Description');
+	$line->setValue('coordinates', '8.802581, 53.075465, 10
+		8.902581, 53.175465, 10');
 	
 	$kmlDocument = new KmlElementGenerator('Document');
-	$kmlDocument->setValue('content', $placemark->generate());
+	$kmlDocument->setValue('content', $placemark->generate() . $overlay->generate() . $line->generate());
 	
 	echo $kmlDocument->generate();
-	*/
 	
 	$json = PersistanceService::getInstance()->getTokens();
 	$authTokens = json_decode($json);
