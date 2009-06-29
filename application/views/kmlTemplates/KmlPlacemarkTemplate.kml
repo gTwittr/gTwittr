@@ -1,9 +1,28 @@
+<Style id="default_placemark">
+	<IconStyle>
+		<color>a1ff00ff</color>
+	   <scale>1.399999976158142</scale>
+	   <Icon>
+			<href>@icon@</href>
+	   </Icon>
+	</IconStyle>
+</Style>
 <Placemark>
-    <name>@name@</name>
-    <description>
-      @description@
-    </description>
-    <Point>
-      <coordinates>@longitude@,@latitude@,@altitude@</coordinates>
-    </Point>
+	<text>
+		<![CDATA[
+			@description@
+		]]>
+	</text>
+	<name>@name@</name>
+	<LookAt>
+		<longitude>@longitude@</longitude>
+		<latitude>@latitude@</latitude>
+		<range>440.8</range>
+		<tilt>8.3</tilt>
+		<heading>2.7</heading>
+	</LookAt>
+	<Point>
+		<coordinates>@longitude@,@latitude@,@altitude@</coordinates>
+	</Point>
+	<styleUrl>#default_placemark</styleUrl>
 </Placemark>

@@ -2,6 +2,6 @@
 <!-- GeoTwitter by Dennis Gieseler, Jonas Panten, Karl Bode -->
 <kml xmlns="http://www.opengis.net/kml/2.2">
 	<?php 
-		include $path; 
+		include $path;
 	?>
 </kml>

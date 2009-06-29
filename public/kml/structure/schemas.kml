@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+		<open>1</open>
+		<visibility>1</visibility>
+		<name></name>
+		<description></description>
+		<Schema name="DefaultSchema" id="default_pm_schema">
+			<SimpleField type="string" name="twitterName">
+				<displayName>
+					<![CDATA[]]>
+				</displayName>
+			</SimpleField>
+		</Schema>
+	</Document>
+</kml>

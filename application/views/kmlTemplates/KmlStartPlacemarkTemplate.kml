@@ -1,0 +1,38 @@
+<Document>
+	<open>1</open>
+	<visibility>1</visibility>
+	<name></name>
+	<description></description>
+	<Style id="default_placemark">
+		<IconStyle>
+			<color>ffffffff</color>
+		   <scale>1.0</scale>
+		   <Icon>
+				<href>@icon@</href>
+		   </Icon>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<description>
+			<![CDATA[
+				<div>
+					@description@ <br />
+					Followers: @followers@ <a href="http://www.gewittr.local/main/followers.kml#followers_start"><br />
+					Following: @following@ <br />
+				</div>
+			]]>
+		</description>
+		<name>@name@</name>
+		<LookAt>
+			<longitude>@longitude@</longitude>
+			<latitude>@latitude@</latitude>
+			<range>440.8</range>
+			<tilt>8.3</tilt>
+			<heading>2.7</heading>
+		</LookAt>
+		<Point>
+			<coordinates>@longitude@,@latitude@,@altitude@</coordinates>
+		</Point>
+		<styleUrl>#default_placemark</styleUrl>
+	</Placemark>
+</Document>

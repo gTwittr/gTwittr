@@ -118,16 +118,51 @@
 			}
 			$view = $this->getView('start');
 			$view->authenticated = false;
+			
+			$kmlValues = array();
+			$kmlValues['name'] = 'Test';
+			
 			if ($this->twitter_service->isAuthenticated()) {
 				$view->authenticated = true;
-				$view->location = new Location(0,0,0);
-				
-				
+				addLocationToMap($this->twitter_service->getLocation(),$kmlValues);
+				$following = $this->twitter_service->getFollowing();
+				$followers = $this->twitter_service->getFollowers();
+				//following
+				$followingCount = 0;
+				if ($following) {
+					$followingCount = count($following);
+				}
+				//followers
+				$followerCount = 0;
+				if ($followers) {
+					$followerCount = count($followers);
+				}
+				$twitter_name = $this->twitter_service->getTwitterName();
+				//
+				$kmlValues['description'] = "Willkommen $twitter_name";	
+				$kmlValues['icon'] = $this->twitter_service->getIconUrl();
+				$kmlValues['followers'] = $followerCount;
+				$kmlValues['following'] = $followingCount;
 			} else {
-				$view->location = $this->location_service->findLocationByName('Wildeshausen');
+				addLocationToMap($this->location_service->findLocationByName('Wildeshausen'),$kmlValues);
 			}
 			
+			
+			
+			$view->kmlValues = $kmlValues;
+			
 			$view->show();
+		}
+		
+		public function followers() {
+			$view = $this->getView('followers');
+			$view->location = $this->twitter_service->getLocation();
+			$view->followers = $this->twitter_service->getFollowers();
+			$view->show();
+		}
+		
+		public function following() {
+			
 		}
 		
 	}

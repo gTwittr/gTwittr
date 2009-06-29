@@ -44,5 +44,13 @@
 			return strcmp($this->ctype,'kml') == 0;
 		}
 	}
+	
+	function addLocationToMap($location, &$map) {
+		if (is_a($location, 'Location') && is_array($map)) {
+			$map['longitude'] = $location->getLongitude();
+			$map['latitude'] = $location->getLatitude();
+			$map['altitude'] = $location->getAltitude();
+		}
+	}
 
 ?>

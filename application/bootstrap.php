@@ -25,7 +25,7 @@
 		}
 	}
 	
-	define('CACHE_OPTS_DIR','./tmp');
+	define('CACHE_OPTS_DIR','./tmp/');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
 	if (ENVIRONMENT == DEVELOPMENT) {
@@ -41,7 +41,7 @@
 	ob_start();
 
 	Identity::initIdentity();
-
+	
 	$dispatcher = new Dispatcher(Registry::getInstance());
 	$dispatcher->setPath(BASE_PATH);
 	$dispatcher->dispatch();

@@ -8,6 +8,14 @@
 		private $latitude;
 		private $altitude;
 		
+		public static function getRandomLocation() {
+			$r_lon = (rand(-9000,9000)/100);
+			$r_lat = (rand(-18000,18000)/100);
+			$alt = 0;
+			$name = 'somewhere';
+			return new Location($r_lon,$r_lat,$alt,$name);
+		}
+		
 		public function __construct($lon,$lat,$alt,$name='unnamed') {
 			$this->longitude = $lon;
 			$this->latitude = $lat;
