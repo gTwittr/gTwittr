@@ -5,4 +5,104 @@
 		<open>1</open>
  		@content@
  	</Folder>
+</kml><?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>TestBalloon</name>
+  <open>1</open>
+  <Style id="tweet">
+    <BalloonStyle>
+      <!-- a background color for the balloon -->
+      <bgColor>2d1E1E1E</bgColor>
+      <!-- styling of the balloon text -->
+      <text><![CDATA[
+	<style type="text/css">
+	<!--
+	.container {
+
+		font-family: Georgia, "Times New Roman", Times, serif;
+		font-size: 24px;
+		font-weight: normal;
+		color: #000;
+	}
+
+	.sidenav{
+		height: 168px;
+		width:111px;
+		float:left;
+	}
+
+	.btns{
+		width:33px;
+		padding-top:10px;
+		padding-bottom:20px;
+	}
+	.mb_borders {
+		height: 10px;
+		width: 286px;
+	}
+
+	.mb_text {
+		background:#FFF;
+		width:256px;
+		padding:5px 15px;
+	}
+
+	.messageBox{
+		width:286px;
+		float:left;
+	}
+	.text_reply{
+		color:#504c4c
+	}
+
+	.text_sender{
+		color:#ffba0f;
+		font-weight:bold;
+	}
+	-->
+	</style>
+
+	<table width="450" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td>
+			<div class="container">
+		<div class="sidenav">
+			<div><img src="images/bird.png" width="111" height="68" /></div>
+			<div class="btns" style="float:left"><img src="images/prev_btn.png" width="33" height="28" /></div>
+			<div class="btns" style="float:left; padding-left:30px"><img src="images/next_btn.png" width="33" height="28" /></div>
+			<div><img src="images/overview_btn.png" width="96" height="27" /></div>
+		<div style="clear:both"></div>
+
+		</div>
+		<div class="messageBox">
+		<div class="mb_borders"><img src="images/msg_top.png" width="286" height="10" /></div>
+		<div class="mb_text">
+
+			<div class="text_sender">$[name]</div>
+			<span class="text_reply">@$recepient:</span> 
+			$[description]</div>
+		<div class="mb_borders"><img src="images/msg_bottom.png" width="286" height="10" /></div>
+
+		</div>
+		<div style="clear:both"></div>
+	</div>
+			</td>
+		</tr>
+		<tr>
+		<td>&nbsp;</td>
+		</tr>
+	</table>
+      ]]></text>
+    </BalloonStyle>
+  </Style>
+  <Placemark>
+    <name>mbp_o_death</name>
+    <description>Das ist ein einfacher fülltext der beweisen soll das geWittR der ooooberhammer ist! Toll sozusagen. Und wie sie merken sind 140 Zeichen viel</description>
+    <styleUrl>#tweet</styleUrl>
+    <Point>
+      <coordinates>-122.370533,37.823842,0</coordinates>
+    </Point>
+  </Placemark>
+</Document>
 </kml>

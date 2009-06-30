@@ -4,6 +4,8 @@
 	<name></name>
 	<description></description>
 	<?php
+		$balloonStylePath = BASE_PATH . '/views/kmlTemplates/KmlBalloonStyleInclude.kml';
+		
 		foreach($followers as $follower) {
 	?>
 		<Style id="follower_placemark_style_<?php echo $follower->twitter_id; ?>">
@@ -13,7 +15,8 @@
 		   	<Icon>
 					<href><?php echo $follower->icon_url; ?></href>
 		   	</Icon>
-			</IconStyle>	
+			</IconStyle>
+			<?php include($balloonStylePath); ?>	
 		</Style>
 	<?php
 		}
@@ -26,6 +29,7 @@
 				<href><?php echo $icon_url; ?></href>
 		   </Icon>
 		</IconStyle>
+		<?php include($balloonStylePath); ?>
 	</Style>
 	<Style id="geWittrStandardLineStyle">
       <LineStyle>
