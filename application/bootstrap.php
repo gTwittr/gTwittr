@@ -1,6 +1,8 @@
 <?php
 	//konfigurieren
 	include_once 'config.php';
+	
+	set_time_limit(0); 
 
 	set_include_path(get_include_path() . PATH_SEPARATOR . BASE_PATH);
 
@@ -25,6 +27,7 @@
 		}
 	}
 	
+	define('CACHE_OPTS_ENABLE',true);
 	define('CACHE_OPTS_DIR','./tmp/');
 	define('CACHE_OPTS_LIFETIME',3600);
 	

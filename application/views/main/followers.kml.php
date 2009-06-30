@@ -27,22 +27,35 @@
 		   </Icon>
 		</IconStyle>
 	</Style>
+	<Style id="geWittrStandardLineStyle">
+      <LineStyle>
+        <color>7fff00ff</color>
+        <width>4</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7f00ff00</color>
+      </PolyStyle>
+    </Style>
 	<!-- MainPlacemark, Navigation -->
 	<Placemark id="followers_start">
 		<description>
 			<![CDATA[
-				<div>
+				<div id="followers_list">
 					<?php
 						foreach($followers as $follower) {
 					?>
-						<?php echo $follower->screen_name; ?>
+						<div class="list_item">
+							<?php echo link_tag($follower->screen_name,"#follower_placemark_$follower->twitter_id;balloonFlyto",false,false); ?>
+						</div>
 					<?php
 						}
 					?>
+					<?php echo link_tag('Zurück','main/start.kml#start_mark;balloonFlyto',true); ?>
 				</div>
 			]]>
 		</description>
-		<name></name>
+		<name>Followers</name>
+		<open>1</open>
 		<LookAt>
 			<longitude><?php echo $location->getLongitude(); ?></longitude>
 			<latitude><?php echo $location->getLatitude(); ?></latitude>
@@ -56,15 +69,39 @@
 		<styleUrl>#default_placemark</styleUrl>
 	</Placemark>
 	<?php 
+	foreach ($followers as $follower) {
+	?>
+	<Placemark>
+		<name>Line to <?php echo $follower->screen_name; ?></name>
+		<LineString>
+			<extrude>1</extrude>
+			<tessellate>1</tessellate>
+			<altitudeMode>clampToGround</altitudeMode>
+			<coordinates>
+				<?php echo $location->getLongitude(); ?>,<?php echo $location->getLatitude(); ?>,0 <?php echo $follower->location->getLongitude(); ?>,<?php echo $follower->location->getLatitude(); ?>,0 
+			</coordinates>
+		</LineString>
+		<styleUrl>#geWittrStandardLineStyle</styleUrl>
+	</Placemark>
+	<?php
+	}
+	?>
+	
+	<?php 
 	foreach($followers as $follower) {
 	?>
 		<Placemark id="follower_placemark_<?php echo $follower->twitter_id; ?>">
 			<description>
 				<![CDATA[
-					
+					<div class="follower">
+						<div class="follower_header">
+							<?php echo $follower->screen_name; ?>
+						</div>
+						<?php echo link_tag('Zurück','#followers_start;balloonFlyto',false,false); ?>
+					</div>
 				]]>	
 			</description>
-			<name></name>
+			<name><?php echo $follower->screen_name; ?></name>
 			<LookAt>
 				<longitude><?php echo $follower->location->getLongitude(); ?></longitude>
 				<latitude><?php echo $follower->location->getLatitude(); ?></latitude>

@@ -12,12 +12,12 @@
 		   </Icon>
 		</IconStyle>
 	</Style>
-	<Placemark>
+	<Placemark id="start_mark">
 		<description>
 			<![CDATA[
 				<div>
 					@description@ <br />
-					Followers: @followers@ <a href="http://www.gewittr.local/main/followers.kml#followers_start"><br />
+					Followers: @followers@ @followersLink@ <br />
 					Following: @following@ <br />
 				</div>
 			]]>

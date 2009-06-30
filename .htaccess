@@ -3,11 +3,17 @@ RewriteEngine On
 #base for all the rewrites
 RewriteBase /
 
+RewriteCond %{REQUEST_URI} #.*$
+RewriteRule ^(.*)$ $1 [NE]
+
 RewriteCond %{REQUEST_URI} !^/public
-RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
 #redirect all pages to the index
 RewriteRule ^(.*)\.(html|kml|json)$ index.php?route=$1&ctype=$2 [QSA] [L]
+
+#RewriteCond %{REQUEST_URI} defaultStyle$
+#RewriteRule ^(.*)$ $1 [NE]
 
 #map all errormessage to the error module
 ErrorDocument 404 ./index.php?module=error&error_code=404

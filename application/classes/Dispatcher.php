@@ -1,5 +1,12 @@
 <?php
-
+		
+	/**
+	 * 
+	 * Übernimmt den Hauptvorgang des Dispatchens
+	 * 
+	 * @author karl
+	 *
+	 */
 	class Dispatcher {
 		
  		const CONTENT_TYPE_HTML = 'HTML';
@@ -69,9 +76,10 @@
 				$route = 'index';
 			} else {
 				$route_parts = explode('/',$route);
-				$this->controller = strtolower($route_parts[0]);
-				if (isset($route_parts[1])) {
-					$this->action = strtolower($route_parts[1]);
+				$session_id = $route_parts[0];
+				$this->controller = strtolower($route_parts[1]);
+				if (isset($route_parts[2])) {
+					$this->action = strtolower($route_parts[2]);
 				}
 			}
 			

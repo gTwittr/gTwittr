@@ -124,9 +124,11 @@
 			
 			if ($this->twitter_service->isAuthenticated()) {
 				$view->authenticated = true;
-				addLocationToMap($this->twitter_service->getLocation(),$kmlValues);
+				addLocationToMap($myLocation,$kmlValues);
+				$myLocation = $this->twitter_service->getLocation();
 				$following = $this->twitter_service->getFollowing();
 				$followers = $this->twitter_service->getFollowers();
+				
 				//following
 				$followingCount = 0;
 				if ($following) {
@@ -142,6 +144,7 @@
 				$kmlValues['description'] = "Willkommen $twitter_name";	
 				$kmlValues['icon'] = $this->twitter_service->getIconUrl();
 				$kmlValues['followers'] = $followerCount;
+				$kmlValues['followersLink'] = link_tag('Link','main/followers.kml#followers_start;balloonFlyto',true);
 				$kmlValues['following'] = $followingCount;
 			} else {
 				addLocationToMap($this->location_service->findLocationByName('Wildeshausen'),$kmlValues);
@@ -156,8 +159,24 @@
 		
 		public function followers() {
 			$view = $this->getView('followers');
-			$view->location = $this->twitter_service->getLocation();
-			$view->followers = $this->twitter_service->getFollowers();
+			
+			$myLocation = $this->twitter_service->getLocation();
+			
+			$view->location = $myLocation;
+			
+			$followers = $this->twitter_service->getFollowers();
+			
+			//var_dump($followers);
+				
+				LocationService::reArrangeLocation($myLocation,$following);
+				LocationService::reArrangeLocation($myLocation,$followers);
+				
+				//var_dump($followers);
+				
+				//die();
+			
+			$view->followers = $followers;
+			
 			$view->show();
 		}
 		

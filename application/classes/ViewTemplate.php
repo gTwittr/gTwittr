@@ -91,24 +91,49 @@
 		}
 	}
 	
-	function link_tag($title,$href) {
+	/**
+	 * Generiert einen Link
+	 * 
+	 * @param $title
+	 * @param $href
+	 * @param $absolute
+	 * @return unknown_type
+	 */
+	function link_tag($title,$href,$absolute=false,$prepend_session=true) {
+		//eingegebene url autrennen
 		$parts = preg_split('/\?/',$href);
-		
+		//Session-Parameter bauen
 		$session_param_name = GEWITTR_SESSION_PARAM_NAME;
 		$session_param_value = Identity::getIdentity()->getSessionId();
 		$session_param = "$session_param_name=$session_param_value";
 		
 		if (!empty($parts) && count($parts) == 2) {
+			//es wurden paramter anegfügt
 			$base_path = $parts[0];
 			$parameters = $parts[1];
+			//parameter wiederum einzeln aufsplitten
 			$params = preg_split('/&/',$parameters);
-			array_push($params,$session_param);
+			//array_push($params,$session_param);
 			$parameters = implode('&',$params);
 			$href = "$base_path?$parameters";
 		} else if (count($parts) == 1) {
-			$href = "$parts[0]?$session_param";
+			$href = $parts[0];//"$parts[0]?$session_param";
 		}
+		
+		//session parameter vorn anhägen
+		if ($prepend_session) {
+			$href = $session_param_value . "/" . $href;	
+		}
+		//wenn der Pfad absulote sein soll, dann die baseurl anhängen
+		if ($absolute) {
+			$href = 'http://' . HOST_NAME . '/' . $href;
+		}
+		//link zurückgeben
 		return "<a href=\"$href\">$title</a>";
+	}
+	
+	function absolute_url($url) {
+		return HOST_NAME . '/' . $url;
 	}
 
 ?>

@@ -91,7 +91,7 @@
 		public function getLocation() {
 			$user_data = $this->verifyCredentials();
 			$rVal = new Location(0,0,0,'');
-			if ($user_data) {
+			if (!$user_data->error) {
 				$rVal = LocationService::getInstance()->findLocationByName($user_data->location);
 			}
 			return $rVal;
@@ -141,45 +141,66 @@
 		
 		public function getUserData($user_id=-1) {
 			$url = "http://twitter.com/users/show/$user_id.json";
-			return $this->callTwitter($url);
+			$twitter_data = $this->callTwitter($url);
+			$rVal = null;
+			if (!$twitter_data->error) {
+				$rVal = new stdClass();
+				$rVal->twitter_id = $user_id;
+				if (empty($twitter_data->location)) {
+					//random
+					$user_location = Location::getRandomLocation();
+				} else {
+					$user_location = LocationService::getInstance()->findLocationByName($twitter_data->location);
+				}
+				$rVal->location = $user_location;
+				
+				$rVal->icon_url = $twitter_data->profile_image_url;
+				$rVal->screen_name = $twitter_data->screen_name;
+				$rVal->verified = $twitter_data->verified;
+			}
+			return $rVal;
+		}
+		
+		public function getBlockedUserIds() {
+			$url = "http://twitter.com/blocks/blocking/ids.json";
+			$twitter_data = $this->callTwitter($url,'GET',true,true);
+			if (!$twitter_data->error) {
+				return $twitter_data;
+			}
+			return array();
 		}
 		
 		public function getFollowers() {
 			$url = "http://twitter.com/followers/ids.json";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
-			foreach ($result as $follower_id) {
-				$user_data = $this->getUserData($follower_id);
-				if ($user_data->error) {
-					continue;
-				}
-				//die(var_dump($user_data));
-				$user_object = new stdClass();
-				$user_object->twitter_id = $follower_id;
-				
-				if (empty($user_data->location)) {
-					//random
-					$user_location = Location::getRandomLocation();
-				} else {
-					$user_location = LocationService::getInstance()->findLocationByName($user_data->location);
-				}
-				$user_object->location = $user_location;
-				
-				$user_object->icon_url = $user_data->profile_image_url;
-				$user_object->screen_name = $user_data->screen_name;
-				$user_object->verified = $user_data->verified;
-				array_push($rVal, $user_object);
+			if (!$result->error) {
+				$result = (array) $result;
+				$result = array_diff($result, $this->getBlockedUserIds());
+				foreach ($result as $follower_id) {
+					$user_object = $this->getUserData($follower_id);
+					if ($user_object != null) {
+						array_push($rVal, $user_object);	
+					}
+				}	
 			}
 			return $rVal;
 		}
 		
 		public function getFollowing() {
-			$user_id = Identity::getIdentity()->getTwitterId();
+			//$user_id = Identity::getIdentity()->getTwitterId();
 			$url = "https://twitter.com/friends/ids.json";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
-			foreach($result as $following_id) {
-				array_push($rVal, $following_id);
+			if (!$result->error) {
+				$result = (array) $result;
+				$result = array_diff($result,$this->getBlockedUserIds());
+				foreach($result as $following_id) {
+					$user_object = $this->getUserData($following_id);
+					if ($user_object != null) {
+						array_push($rVal, $user_object);	
+					}
+				}
 			}
 			return $rVal;
 		}
@@ -199,6 +220,14 @@
 		
 		public function isAuthenticated() {
 			return $this->access_token !== NULL && $this->access_token_secret !== NULL;
+		}
+		
+		private function resultToArray($object) {
+			$rVal = array();
+			if (is_a($object, "stdClass") && !$object->error) {
+				$rVal = (array) $object;
+			}
+			return $rVal;
 		}
 		
 		
