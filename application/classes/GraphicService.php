@@ -21,7 +21,7 @@
 		
 		public function generateProfileImage($url, $color) {
 			
-			$tmpname = './image_cache/' . $imageType . '_' . md5($url . $color) . '.png';
+			$tmpname = './image_cache/' . $profile . '_' . md5($url . $color) . '.png';
 		
 			if (file_exists($tmpname)) {
 				if(time() - filemtime($tmpname) < IMAGE_CACHE_TIME) {
@@ -37,7 +37,7 @@
 			$borderColor->setColor($color);
 			
 			$image = new Imagick($tmpname . '_tmp');
-			$image->thumbnailImage(48, 0);
+			$image->thumbnailImage(48, 48);
 			$image->borderImage($borderColor, 3, 3);
 			
 			$image->writeImage($tmpname);
@@ -46,6 +46,48 @@
 			
 			return 'http://' . HOST_NAME . ltrim($tmpname, '.');
 		}
+		
+		public function generateInfoBarImage($profileImageUrl, $screenName, $numFollowing, $numFollowers) {
+			
+			$profileImgTmp = './image_cache/profile_' . md5($profileImageUrl) . '.png';
+			$infoBarName = './image_cache/' . $screenName . '_' . md5($profileImageUrl) . '.png';
+
+			if (file_exists($profileImgTmp)) {
+				if(time() - filemtime($profileImgTmp) < IMAGE_CACHE_TIME) {
+					return 'http://' . HOST_NAME . ltrim($profileImgTmp, '.');
+				}else{
+					unlink($profileImgTmp);
+				}
+			}
+			
+			copy($profileImageUrl, $profileImgTmp . '_tmp');
+			
+			//create profile image
+			$profileImg = new Imagick($profileImgTmp . '_tmp');
+			$profileImg->thumbnailImage(23, 23);
+	
+			
+			//create info bar image
+			$infoBarImg = new Imagick('./data/topBar.png');
+			$infoBarImg->compositeImage($profileImg, Imagick::COMPOSITE_DEFAULT, 237, 4);
+			
+			//create screen name text
+			$draw = new ImagickDraw();
+			$pixel = new ImagickPixel( 'gray' );
+			$draw->setFillColor(COLOR_USER);
+			$draw->setFont('data/TahomaBold.ttf');
+			$draw->setFontSize( 11 );
+			$infoBarImg->annotateImage($draw, 265, 19, 0, $screenName);
+			$infoBarImg->annotateImage($draw, 415, 19, 0, $numFollowing);
+			$infoBarImg->annotateImage($draw, 505, 19, 0, $numFollowers);;
+			
+			$infoBarImg->writeImage($infoBarName);
+			
+			unlink($profileImgTmp . '_tmp');
+			
+			return 'http://' . HOST_NAME . ltrim($infoBarName, '.');
+		}
+	
 	
 }
 
