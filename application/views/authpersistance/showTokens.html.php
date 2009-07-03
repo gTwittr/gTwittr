@@ -43,9 +43,18 @@
 	$firephp->log($json);
 	$firephp->log($authTokens);
 	
+	//$imgdata = GraphicService::getInstance()->generateProfileImage('http://static.twitter.com/images/default_profile_normal.png');
+	
+
+	//$filename = GraphicService::getInstance()->generateProfileImage('http://static.twitter.com/images/default_profile_normal.png', COLOR_FOLLOWING);
+	$filename = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/290530654/penner_normal.jpg', COLOR_USER);
+	
+	echo $filename;
 	
 	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
 ?>
+
+<img src="<?php echo $filename; ?>"/>
 
 <div id="addToken_form">
 	<table cellpadding=10>

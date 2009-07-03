@@ -13,6 +13,11 @@
 	define('GEWITTR_SESSION_PARAM_NAME','gws');
 	
 	define('HOST_NAME',$_SERVER['HTTP_HOST']);
+	
+	define('COLOR_FOLLOWER', "rgb(10,10,10)");
+	define('COLOR_FOLLOWING', "rgb(168,168,168)");
+	define('COLOR_USER', "rgb(255,124,0)");
+	define('IMAGE_CACHE_TIME', 3600);	//in seconds
 
 	include('tokens.php');
 	
