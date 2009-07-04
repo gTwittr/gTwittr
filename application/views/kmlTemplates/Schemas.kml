@@ -1,0 +1,28 @@
+<Schema name="FriendOverviewSchema" id="OverviewSchema">
+	<SimpleField type="string" id="header">
+		<displayName>
+			<![CDATA[]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="int" name="friendCount">
+		<displayName>
+			<![CDATA[]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" name="list">
+		<displayName>
+			<![CDATA[]]>
+		</displayName>
+	</SimpleField>
+</Schema>
+<Schema name="TwitterUserSchema" id="UserSchema">
+	<SimpleField type="string" id="screen_name">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+	<SimpleField type="int" id="following_count">
+		<displayName><![CDATA[<b>Following:</b>]]></displayName>
+	</SimpleField>
+	<SimpleField type="int" id="followers_count">
+		<displayName><![CDATA[<b>Followers:</b>]]></displayName>
+	</SimpleField>
+</Schema>

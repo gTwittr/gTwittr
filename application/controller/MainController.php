@@ -124,10 +124,12 @@
 			
 			if ($this->twitter_service->isAuthenticated()) {
 				$view->authenticated = true;
-				addLocationToMap($myLocation,$kmlValues);
+				
 				$myLocation = $this->twitter_service->getLocation();
 				$following = $this->twitter_service->getFollowing();
 				$followers = $this->twitter_service->getFollowers();
+				
+				addLocationToMap($myLocation,$kmlValues);
 				
 				//following
 				$followingCount = 0;
@@ -158,6 +160,11 @@
 		}
 		
 		public function followers() {
+			
+			$user_id = getValueOrDefault($_GET['user_id'],-1);
+			
+			
+			
 			$view = $this->getView('followers');
 			
 			$myLocation = $this->twitter_service->getLocation();

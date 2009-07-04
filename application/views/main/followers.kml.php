@@ -3,8 +3,10 @@
 	<visibility>1</visibility>
 	<name></name>
 	<description></description>
+	<?php include(BASE_PATH . '/views/kmlTemplates/Schemas.kml'); ?>
 	<?php
 		$balloonStylePath = BASE_PATH . '/views/kmlTemplates/KmlBalloonStyleInclude.kml';
+		$balloonFriendListStylePath = BASE_PATH . '/views/kmlTemplates/KmlBalloonFriendsListStyleInclude.kml';
 		
 		foreach($followers as $follower) {
 	?>
@@ -15,12 +17,14 @@
 		   	<Icon>
 					<href><?php echo $follower->icon_url; ?></href>
 		   	</Icon>
-			</IconStyle>
-			<?php include($balloonStylePath); ?>	
+			</IconStyle>	
 		</Style>
 	<?php
 		}
 	?>
+	<Style id="default_follower_style">
+		<?php include($balloonStylePath); ?>
+	</Style>
 	<Style id="default_placemark">
 		<IconStyle>
 			<color>ffffffff</color>
@@ -29,7 +33,7 @@
 				<href><?php echo $icon_url; ?></href>
 		   </Icon>
 		</IconStyle>
-		<?php include($balloonStylePath); ?>
+		<?php include($balloonFriendListStylePath); ?>
 	</Style>
 	<Style id="geWittrStandardLineStyle">
       <LineStyle>
@@ -42,7 +46,7 @@
     </Style>
 	<!-- MainPlacemark, Navigation -->
 	<Placemark id="followers_start">
-		<description>
+		<!-- description>
 			<![CDATA[
 				<div id="followers_list">
 					<?php
@@ -57,7 +61,7 @@
 					<?php echo link_tag('Zurück','main/start.kml#start_mark;balloonFlyto',true); ?>
 				</div>
 			]]>
-		</description>
+		</description -->
 		<name>Followers</name>
 		<open>1</open>
 		<LookAt>
@@ -71,6 +75,24 @@
 			<coordinates><?php echo $location->getLongitude(); ?>,<?php echo $location->getLatitude(); ?>,0</coordinates>
 		</Point>
 		<styleUrl>#default_placemark</styleUrl>
+		<ExtendedData>
+			<SchemaData schemaUrl="#OverviewSchema">
+				<SimpleData name="header"><?php echo ''; ?> Followers</SimpleData>
+				<SimpleData name="list">
+					<![CDATA[
+						<?php
+						foreach($followers as $follower) {
+						?>
+						<div class="list_item">
+							<?php echo link_tag($follower->screen_name,"#follower_placemark_$follower->twitter_id;balloonFlyto",false,false); ?>
+						</div>
+						<?php
+						}
+						?>
+					]]>
+				</SimpleData>
+			</SchemaData>
+		</ExtendedData>
 	</Placemark>
 	<?php 
 	foreach ($followers as $follower) {
@@ -95,16 +117,6 @@
 	foreach($followers as $follower) {
 	?>
 		<Placemark id="follower_placemark_<?php echo $follower->twitter_id; ?>">
-			<description>
-				<![CDATA[
-					<div class="follower">
-						<div class="follower_header">
-							<?php echo $follower->screen_name; ?>
-						</div>
-						<?php echo link_tag('Zurück','#followers_start;balloonFlyto',false,false); ?>
-					</div>
-				]]>	
-			</description>
 			<name><?php echo $follower->screen_name; ?></name>
 			<LookAt>
 				<longitude><?php echo $follower->location->getLongitude(); ?></longitude>
@@ -116,7 +128,24 @@
 			<Point>
 				<coordinates><?php echo $follower->location->getLongitude(); ?>,<?php echo $follower->location->getLatitude(); ?>,0</coordinates>
 			</Point>
-			<styleUrl>#follower_placemark_style_<?php echo $follower->twitter_id; ?></styleUrl>
+			<StyleMap> 
+    			<Pair> 
+      				<key>normal</key> 
+      				<styleUrl>#follower_placemark_style_<?php echo $follower->twitter_id; ?></styleUrl> 
+    			</Pair> 
+    			<Pair> 
+      				<key>highlight</key> 
+      				<styleUrl>#follower_placemark_style_<?php echo $follower->twitter_id; ?></styleUrl> 
+    			</Pair> 
+  			</StyleMap> 
+			<styleUrl>#default_follower_style</styleUrl>
+			<ExtendedData>
+			<SchemaData schemaUrl="#UserSchema">
+				<SimpleData name="screen_name"><?php echo $follower->screen_name; ?></SimpleData>
+				<SimpleData name="followers_count"><?php echo $follower->followers_count; ?></SimpleData>
+				<SimpleData name="following_count"><?php echo $follower->following_count; ?></SimpleData>
+			</SchemaData>
+		</ExtendedData>
 		</Placemark>
 	<?php	
 	}

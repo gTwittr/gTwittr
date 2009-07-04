@@ -38,6 +38,10 @@
 			return $this->twitter_id;
 		}
 		
+		public function setTwitterId($id) {
+			$this->twitter_id = $id;
+		}
+		
 		public function getAccessToken() {
 			return $this->access_token;
 		}

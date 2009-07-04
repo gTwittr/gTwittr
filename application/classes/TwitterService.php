@@ -41,7 +41,7 @@
 			$firephp->log($tok, 'RequestToken');
 			//RequestToken und RequestTokenSecret in Session Speichern
 			$_SESSION['oauth_request_token'] = $token = $tok['oauth_token'];
-		  $_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
+		  	$_SESSION['oauth_request_token_secret'] = $tok['oauth_token_secret'];
 			$rVal = '';
 			if (isset($_SESSION['oauth_request_token'])) {
 				$token = $_SESSION['oauth_request_token'];
@@ -67,7 +67,7 @@
 			$firephp->log($this->token, 'getAccessToken - Response');
 			//accessToken und accessTokenSecret auslesen und speichern
 			$this->access_token = $_SESSION['oauth_access_token'] = $this->token['oauth_token'];
-	    $this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
+	    	$this->access_token_secret = $_SESSION['oauth_access_token_secret'] = $this->token['oauth_token_secret'];
 			//twitterOAuth mit access_token und access_token_secret anlegen
 			$this->to = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $this->access_token, $this->access_token_secret);
 			$firephp->log($_SESSION['oauth_access_token'], 'AccessToken');
@@ -85,13 +85,16 @@
 		}
 		
 		public function verifyCredentials() {
-			return $this->callTwitter('https://twitter.com/account/verify_credentials.json');
+			$twitter_data = $this->callTwitter('https://twitter.com/account/verify_credentials.json');
+			if ($twitter_data && !$twitter_data->error && !Identity::getIdentity()->getTwitterId()) {
+				Identity::getIdentity()->setTwitterId($twitter_data->id);
+			}
 		}
 		
 		public function getLocation() {
 			$user_data = $this->verifyCredentials();
 			$rVal = new Location(0,0,0,'');
-			if (!$user_data->error) {
+			if ($user_data && !$user_data->error) {
 				$rVal = LocationService::getInstance()->findLocationByName($user_data->location);
 			}
 			return $rVal;
@@ -100,7 +103,7 @@
 		public function getTwitterName() {
 			$user_data = $this->verifyCredentials();
 			$rVal = "";
-			if ($user_data) {
+			if ($user_data && $user_data->error) {
 				$rVal = $user_data->name;
 			}
 			return $rVal;
@@ -157,6 +160,10 @@
 				$rVal->icon_url = $twitter_data->profile_image_url;
 				$rVal->screen_name = $twitter_data->screen_name;
 				$rVal->verified = $twitter_data->verified;
+				$rVal->following = array();
+				$rVal->followers = array();
+				$rVal->following_count = count($rVal->following);
+				$rVal->followers_count = count($rVal->followers);
 			}
 			return $rVal;
 		}
@@ -170,13 +177,29 @@
 			return array();
 		}
 		
-		public function getFollowers() {
-			$url = "http://twitter.com/followers/ids.json";
+		private function ownTwitterId() {
+			return Identity::getIdentity()->getTwitterId();
+		}
+		
+		private function isMe($user_id) {
+			if ($user_id && $user_id != -1) {
+				return $this->ownTwitterId() == $user_id;
+			}
+			return false;
+		}
+		
+		public function getFollowers($user_id = -1) {
+			if ($user_id == 1) {
+				$user_id = $this->ownTwitterId();
+			}
+			$url = "http://twitter.com/followers/ids.json?user_id=$user_id";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
 			if (!$result->error) {
 				$result = (array) $result;
-				$result = array_diff($result, $this->getBlockedUserIds());
+				if ($this->isMe($user_id)) {
+					$result = array_diff($result, $this->getBlockedUserIds());	
+				}
 				foreach ($result as $follower_id) {
 					$user_object = $this->getUserData($follower_id);
 					if ($user_object != null) {
@@ -187,14 +210,18 @@
 			return $rVal;
 		}
 		
-		public function getFollowing() {
-			//$user_id = Identity::getIdentity()->getTwitterId();
-			$url = "https://twitter.com/friends/ids.json";
+		public function getFollowing($user_id = -1) {
+			if ($user_id == -1) {
+				$user_id = $this->ownTwitterId();
+			}
+			$url = "https://twitter.com/friends/ids.json?user_id=$user_id";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
 			if (!$result->error) {
 				$result = (array) $result;
-				$result = array_diff($result,$this->getBlockedUserIds());
+				if ($this->isMe($user_id)) {
+					$result = array_diff($result,$this->getBlockedUserIds());	
+				}
 				foreach($result as $following_id) {
 					$user_object = $this->getUserData($following_id);
 					if ($user_object != null) {

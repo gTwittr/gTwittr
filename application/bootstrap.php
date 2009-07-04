@@ -51,4 +51,15 @@
 	
 	ob_end_flush();
 
+	/**
+	 * Hilfsfunktionen
+	 */
+	
+	function getValueOrDefault(&$target, $default) {
+		if (isset($target)) {
+			return $target;
+		}
+		return $default;
+	}
+	
 ?>
