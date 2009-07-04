@@ -18,8 +18,8 @@
 		
 		public function __construct($registry) {
 			$this->registry = $registry;
-			$this->ctype = Helper::get_value($_GET['ctype'],'html');
-			$this->route = Helper::get_value($_GET['route'],'');
+			$this->ctype = getValueOrDefault($_GET['ctype'],'html');
+			$this->route = getValueOrDefault($_GET['route'],'');
 			//Namen des Controller (Subklasse) extrahieren und an View übergeben
 			$this->view = new ViewTemplate($registry, strtolower(preg_replace('/^(.*)Controller$/', '$1', get_class($this))),'',$this->ctype);
 			$this->twitter_service = TwitterService::getInstance();
