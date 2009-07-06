@@ -146,8 +146,9 @@
 				$kmlValues['description'] = "Willkommen $twitter_name";	
 				$kmlValues['icon'] = $this->twitter_service->getIconUrl();
 				$kmlValues['followers'] = $followerCount;
-				$kmlValues['followersLink'] = link_tag('Link','main/followers.kml#followers_start;balloonFlyto',true);
+				$kmlValues['followersLink'] = link_tag('Link','main/followers.kml#start;balloonFlyto',true);
 				$kmlValues['following'] = $followingCount;
+				$kmlValues['followingLink'] = link_tag('Link','main/following.kml#start;balloonFlyto',true);
 			} else {
 				addLocationToMap($this->location_service->findLocationByName('Wildeshausen'),$kmlValues);
 			}
@@ -160,34 +161,44 @@
 		}
 		
 		public function followers() {
-			
+			//scope evtl. auf einen anderen user setzen
 			$user_id = getValueOrDefault($_GET['user_id'],-1);
+			$view = $this->getView('friends');
+			$userLocation = $this->twitter_service->getLocation($user_id);
+			$view->location = $userLocation;
+			$followers = $this->twitter_service->getFollowers($user_id);
+			LocationService::reArrangeLocation($userLocation,$followers);
+			$view->friends = $followers;
+			$view->header = "Follower";
 			
-			
-			
-			$view = $this->getView('followers');
-			
-			$myLocation = $this->twitter_service->getLocation();
-			
-			$view->location = $myLocation;
-			
-			$followers = $this->twitter_service->getFollowers();
-			
-			//var_dump($followers);
-				
-				LocationService::reArrangeLocation($myLocation,$following);
-				LocationService::reArrangeLocation($myLocation,$followers);
-				
-				//var_dump($followers);
-				
-				//die();
-			
-			$view->followers = $followers;
+			$view->lineStyleColor = 'ffff0000';
+			$view->polyStyleColor = 'ffffff00';
 			
 			$view->show();
 		}
 		
 		public function following() {
+			$user_id = getValueOrDefault($_GET['user_id'],-1);
+			
+			$view = $this->getView('friends');
+			
+			$userLocation = $this->twitter_service->getLocation($user_id);
+			$view->location = $userLocation;
+			
+			$following = $this->twitter_service->getFollowing($user_id);
+			
+			LocationService::reArrangeLocation($userLocation,$following);
+			
+			$view->friends = $following;
+			$view->header = "Following";
+			
+			$view->lineStyleColor = 'ff00ffff';
+			$view->polyStyleColor = 'ff0000ff';
+			
+			$view->show();
+		}
+		
+		public function friends() {
 			
 		}
 		

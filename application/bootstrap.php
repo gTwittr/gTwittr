@@ -27,22 +27,41 @@
 		}
 	}
 	
-	define('CACHE_OPTS_ENABLE',true);
+	//cache optionen setzen
+	define('CACHE_OPTS_ENABLE',false);
 	define('CACHE_OPTS_DIR','./tmp/');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
-	if (ENVIRONMENT == DEVELOPMENT) {
-		define('GWS_SESSION_ID','4a36337484b7a');	
-	} else {
-		define('GWS_SESSION_ID',$_GET[GEWITTR_SESSION_PARAM_NAME]);
-	}
+	//session einlesen
+	$route_parts = explode('/',getValueOrDefault($_GET['route'],'no_session/index/index'));
+	//default werte
+	$session = 'no_session';
+	$controller = 'index';
+	$view = 'index';
 	
+	if (count($route_parts) == 3) {
+		$session = $route_parts[0];
+		$controller = $route_parts[1];
+		$view = $route_parts[2];
+	} else {
+		throw new Exception('cannot create session context');
+	}
 	
 	session_name(SESSION_NAME);
 	session_start();
 	
 	ob_start();
-
+	
+	if (ENVIRONMENT == DEVELOPMENT) {
+		if ($session == 'no_session') {
+			define('GWS_SESSION_ID','4a50918e20f71');	
+		}
+	}
+	
+	if (!defined('GWS_SESSION_ID')) {
+		define('GWS_SESSION_ID',$session);
+	}
+	
 	Identity::initIdentity();
 	
 	$dispatcher = new Dispatcher(Registry::getInstance());

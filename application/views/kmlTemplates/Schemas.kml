@@ -16,7 +16,13 @@
 	</SimpleField>
 </Schema>
 <Schema name="TwitterUserSchema" id="UserSchema">
+	<SimpleField type="int" id="twitter_id">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
 	<SimpleField type="string" id="screen_name">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+	<SimpleField type="string" id="description">
 		<displayName><![CDATA[]]></displayName>
 	</SimpleField>
 	<SimpleField type="int" id="following_count">
@@ -24,5 +30,14 @@
 	</SimpleField>
 	<SimpleField type="int" id="followers_count">
 		<displayName><![CDATA[<b>Followers:</b>]]></displayName>
+	</SimpleField>
+	<SimpleField type="string" id="followers_link">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+	<SimpleField type="string" id="following_link">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+	<SimpleField type="string" id="tweet_list">
+		<displayName><![CDATA[]]></displayName>
 	</SimpleField>
 </Schema>

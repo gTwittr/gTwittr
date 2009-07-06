@@ -16,6 +16,7 @@
 		
 		public function setToken() {
 			$view = $this->getView("showTokens");
+			
 			PersistanceService::getInstance()->setToken($username = $_POST['twitterId'], $username = $_POST['token'], $username = $_POST['secret']);
 			
 			$view->show();

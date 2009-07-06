@@ -4,3 +4,9 @@ html, body {
 	background: #FFF;
 	font-family: Sans-Serif;
 }
+
+div#body {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}

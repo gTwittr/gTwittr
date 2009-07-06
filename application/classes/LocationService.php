@@ -31,7 +31,19 @@
 		}
 		
 		public function findLocation($text) {
-			$coords = preg_split('/^.*(-?[0-9]\.[0-9]),(-?[0-9]\.[0-9]).*$/', $text);
+			$rVal = new Location(0,0,0);
+			if ($text && !empty($text)) {
+				$coords = preg_split('/^.*(-?[0-9]\.[0-9]),(-?[0-9]\.[0-9]).*$/', $text);
+				$lng = $coords[0];
+				$lat = $coords[1];
+				$rVal = new Location($lng,$lat,0);
+			}
+			return $rVal;
+		}
+		
+		//TO-DO
+		public function extractLocation($text, $fallback_location) {
+			return $this->findLocationByName($fallback_location);
 		}
 		
 		private function queryGeonamesService($url) {

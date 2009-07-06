@@ -74,8 +74,13 @@
 					</div>
 					<div class="mb_text">
 						<div class="text_sender">$[TwitterUserSchema/screen_name]</div>
-						Followers: $[TwitterUserSchema/followers_count]
-						Following: $[TwitterUserSchema/following_count]
+						$[TwitterUserSchema/description]
+						Followers: $[TwitterUserSchema/followers_count] $[TwitterUserSchema/followers_link] 
+						Following: $[TwitterUserSchema/following_count] $[TwitterUserSchema/following_link]
+						<div id="tweets">
+							Tweets:
+							$[TwitterUserSchema/tweet_list]
+						</div>
 					</div>
 					<div class="mb_borders">
 						<img src="<?php echo $imgPath; ?>msg_bottom.png" width="286" height="10" />

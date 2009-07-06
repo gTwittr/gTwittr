@@ -4,6 +4,7 @@
 		
 		private $message;
 		private $location;
+		private $created_at;
 		
 		public function __construct($message,$location) {
 			$this->message = $message;

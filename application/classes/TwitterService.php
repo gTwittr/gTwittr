@@ -91,8 +91,16 @@
 			}
 		}
 		
-		public function getLocation() {
-			$user_data = $this->verifyCredentials();
+		public function getUserInfo($user_id = -1) {
+			if ($user_id == -1) {
+				$user_id = $this->ownTwitterId();
+			}
+			$url = "http://twitter.com/users/show/$user_id.json";
+			return $this->callTwitter($url);
+		}
+		
+		public function getLocation($user_id = -1) {
+			$user_data = $this->getUserInfo($user_id);
 			$rVal = new Location(0,0,0,'');
 			if ($user_data && !$user_data->error) {
 				$rVal = LocationService::getInstance()->findLocationByName($user_data->location);
@@ -100,8 +108,8 @@
 			return $rVal;
 		}
 		
-		public function getTwitterName() {
-			$user_data = $this->verifyCredentials();
+		public function getTwitterName($user_id = -1) {
+			$user_data = $this->getUserInfo($user_id);
 			$rVal = "";
 			if ($user_data && $user_data->error) {
 				$rVal = $user_data->name;
@@ -109,8 +117,8 @@
 			return $rVal;
 		}
 		
-		public function getIconURL() {
-			$user_data = $this->verifyCredentials();
+		public function getIconURL($user_id = -1) {
+			$user_data = $this->getUserInfo($user_id);
 			$rVal = "";
 			if ($user_data) {
 				$rVal = $user_data->profile_image_url;
@@ -124,14 +132,29 @@
 					return json_decode($json_data);
 				}
 			}
+			// Zur Entwicklung wird nicht OAuth genutzt, da der Mechanismus lokal nicht funktioniert
 			if (ENVIRONMENT == DEVELOPMENT) {
 				$curl = curl_init();
+				
+				curl_setopt($curl, CURLOPT_GET, 1);
+				
+				curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
+				curl_setopt($curl, CURLOPT_HEADER, false);
+				curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+				
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+				
 				if ($authenticate) {
+					if (preg_match('/followers\/ids\.json\?user_id=\d+$/',$url) > 0) {
+						echo "authenticate : $url " . "$this->access_token:$this->access_token_secret";
+					}
 					curl_setopt($curl, CURLOPT_USERPWD, "$this->access_token:$this->access_token_secret");	
 				}
+				
 				curl_setopt($curl, CURLOPT_URL, $url);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+				
 				$json_data = curl_exec($curl);
 			} else {
 				$json_data = $this->to->OAuthRequest($url, array(), $method);	
@@ -142,13 +165,30 @@
 			return json_decode($json_data);
 		}
 		
-		public function getUserData($user_id=-1) {
-			$url = "http://twitter.com/users/show/$user_id.json";
+		public function getUserTimelineTweets($user_id=-1) {
+			$rVal = array();
+			if ($user_id == -1) {
+				$user_id = $this->ownTwitterId();
+			}
+			$url = "http://twitter.com/statuses/user_timeline/$user_id.json";
 			$twitter_data = $this->callTwitter($url);
+			if ($twitter_data && !$twitter_data->error) {
+				foreach($twitter_data as $status) {
+					$tweet = new stdClass();
+					$tweet->text = $status->text;
+					$tweet->created_at = $status->created_at;
+					$tweet->location = LocationService::getInstance()->extractLocation($tweet->text, $twitter_data->user->location);
+					array_push($rVal,$tweet);
+				}
+			}
+			return $rVal;
+		}
+		
+		public function buildUser($twitter_data) {
 			$rVal = null;
-			if (!$twitter_data->error) {
+			if ($twitter_data && !$twitter_data->error) {
 				$rVal = new stdClass();
-				$rVal->twitter_id = $user_id;
+				$rVal->twitter_id = $twitter_data->id;
 				if (empty($twitter_data->location)) {
 					//random
 					$user_location = Location::getRandomLocation();
@@ -156,14 +196,22 @@
 					$user_location = LocationService::getInstance()->findLocationByName($twitter_data->location);
 				}
 				$rVal->location = $user_location;
-				
 				$rVal->icon_url = $twitter_data->profile_image_url;
 				$rVal->screen_name = $twitter_data->screen_name;
 				$rVal->verified = $twitter_data->verified;
-				$rVal->following = array();
-				$rVal->followers = array();
-				$rVal->following_count = count($rVal->following);
-				$rVal->followers_count = count($rVal->followers);
+				$rVal->description = $twitter_data->description;
+				$rVal->following_count = $twitter_data->friends_count;
+				$rVal->followers_count = $twitter_data->followers_count;
+				$rVal->tweets = $this->getUserTimelineTweets($rVal->twitter_id);
+			}
+			return $rVal;
+		}
+		
+		public function getUserData($user_id=-1) {
+			$rVal = null;
+			if ($user_id != -1) {
+				$twitter_data = $this->getUserInfo($user_id);
+				$rVal = $this->buildUser($twitter_data);
 			}
 			return $rVal;
 		}
@@ -189,16 +237,19 @@
 		}
 		
 		public function getFollowers($user_id = -1) {
-			if ($user_id == 1) {
-				$user_id = $this->ownTwitterId();
+			if ($user_id == -1) {
+				$url = "http://twitter.com/followers/ids.json";
+			} else {
+				$url = "http://twitter.com/followers/ids/$user_id.json";	
 			}
-			$url = "http://twitter.com/followers/ids.json?user_id=$user_id";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
+			//die(var_dump($result));
 			if (!$result->error) {
 				$result = (array) $result;
-				if ($this->isMe($user_id)) {
-					$result = array_diff($result, $this->getBlockedUserIds());	
+				//blocked users entfernen
+				if ($user_id == -1) {
+					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach ($result as $follower_id) {
 					$user_object = $this->getUserData($follower_id);
@@ -212,15 +263,17 @@
 		
 		public function getFollowing($user_id = -1) {
 			if ($user_id == -1) {
-				$user_id = $this->ownTwitterId();
+				$url = "http://twitter.com/friends/ids.json";
+			} else {
+				$url = "http://twitter.com/friends/ids/$user_id.json";	
 			}
-			$url = "https://twitter.com/friends/ids.json?user_id=$user_id";
 			$result = $this->callTwitter($url,'GET',true,false);
 			$rVal = array();
 			if (!$result->error) {
 				$result = (array) $result;
-				if ($this->isMe($user_id)) {
-					$result = array_diff($result,$this->getBlockedUserIds());	
+				//blocked users entfernen
+				if ($user_id == -1) {
+					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach($result as $following_id) {
 					$user_object = $this->getUserData($following_id);
