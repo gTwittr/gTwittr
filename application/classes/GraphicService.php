@@ -27,6 +27,8 @@
 		
 		public function generateProfileImage($url, $color) {
 			
+			$this->clearCache();
+			
 			$template_image = './data/';
 			
 			if ($color == COLOR_FOLLOWER) {
@@ -116,9 +118,35 @@
 			} else {
 				return '';
 			}
-			
-			
 		}
+		
+		private function clearCache() {
+			$cleanCacheFile = './image_cache/cacheclean';
+			
+			if ( !file_exists($cleanCacheFile) ) {
+				$file = fopen($cleanCacheFile, 'w');
+				if ($file) {
+					fputs($file, "42");
+					fclose($file);
+				}
+				echo "cleanCacheFile created<br>";
+			}
+			
+			if(time() - filemtime($cleanCacheFile) > (IMAGE_CACHE_TIME * 2)) {
+				touch($cleanCacheFile);
+				
+				$files = scandir('./image_cache');
+		
+				$count = count($files);
+				for ($i = 2; $i < $count; $i++) {
+					if (! substr_compare($files[$i], '.png', strlen($files[$i]) - 4, 4) ) {
+						if(time() - filemtime('./image_cache/' . $files[$i]) > IMAGE_CACHE_TIME) {
+							unlink('./image_cache/' . $files[$i]);
+						}
+					}
+				}
+			}
+		} 
 	
 	
 }
