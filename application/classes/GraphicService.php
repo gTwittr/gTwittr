@@ -31,7 +31,7 @@
 			
 			$template_image = './data/';
 			
-			if ($color == COLOR_FOLLOWER) {
+			if ($color == COLOR_FOLLOWERS) {
 				$template_image = $template_image . 'profile_follower.png';
 			}else if ($color == COLOR_FOLLOWING) {
 				$template_image = $template_image . 'profile_following.png';
