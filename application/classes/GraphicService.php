@@ -96,7 +96,7 @@
 
 				//create info bar image
 				$infoBarImg = new Imagick('./data/topBar.png');
-				$infoBarImg->compositeImage($profileImg, Imagick::COMPOSITE_DEFAULT, 237, 4);
+				$infoBarImg->compositeImage($profileImg, Imagick::COMPOSITE_DEFAULT, 322, 4);
 
 				//create screen name text
 				$draw = new ImagickDraw();
@@ -104,7 +104,7 @@
 				$draw->setFillColor(COLOR_USER);
 				$draw->setFont('data/TahomaBold.ttf');
 				$draw->setFontSize( 11 );
-				$infoBarImg->annotateImage($draw, 265, 19, 0, $screenName);
+				$infoBarImg->annotateImage($draw, 237, 19, 0, $screenName);
 				$infoBarImg->annotateImage($draw, 415, 19, 0, $numFollowing);
 				$infoBarImg->annotateImage($draw, 505, 19, 0, $numFollowers);;
 

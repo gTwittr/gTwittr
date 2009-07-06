@@ -55,16 +55,16 @@
 	
 	$filename3 = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/69546449/2793452349_794ae79227_mini_studi_normal.jpg', COLOR_USER);
 	*/
-	/*
+	
 	$filename = GraphicService::getInstance()->generateInfoBarImage('http://s3.amazonaws.com/twitter_production/profile_images/60498760/Bild_224-1_normal.jpg', 'Stefffi', 24, 25);
 	echo $filename;
-	*/
+	
 	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
 ?>
 
-<!--
+
 <img src="<?php echo $filename; ?>"/>
-<img src="<?php echo $filename2; ?>"/>
+<!--<img src="<?php echo $filename2; ?>"/>
 <img src="<?php echo $filename3; ?>"/>
 -->
 
