@@ -48,17 +48,17 @@
 
 	//$filename = GraphicService::getInstance()->generateProfileImage('http://static.twitter.com/images/default_profile_normal.png', COLOR_FOLLOWING);
 	
-	/*
-	$filename = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/290530654/penner_normal.jpg', COLOR_FOLLOWER);
 	
+	$filename = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/290530654/penner_normal.jpg', COLOR_FOLLOWER);
+	/*
 	$filename2 = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/60498760/Bild_224-1_normal.jpg', COLOR_FOLLOWING);
 	
 	$filename3 = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/69546449/2793452349_794ae79227_mini_studi_normal.jpg', COLOR_USER);
 	*/
-	
+	/*
 	$filename = GraphicService::getInstance()->generateInfoBarImage('http://s3.amazonaws.com/twitter_production/profile_images/60498760/Bild_224-1_normal.jpg', 'Stefffi', 24, 25);
 	echo $filename;
-	
+	*/
 	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
 ?>
 

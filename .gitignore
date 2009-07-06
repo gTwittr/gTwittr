@@ -6,3 +6,4 @@ application/twitter_test_login.php
 tmp/*
 ._*
 image_cache/*.png
+image_cache/cacheclean
