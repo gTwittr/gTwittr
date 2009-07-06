@@ -48,6 +48,40 @@
 			font-weight:bold;
 		}
 	</style>
+	
+	<?php include(BASE_PATH . '/views/javascript/pagination.js'); ?>
+	
+	<script type="text/javascript" charset="utf-8">
+
+		var tweets = $[TwitterUserSchema/tweet_list];
+
+		function handlePaginationClick(new_page_index, pagination_container) {
+			
+			// This selects 20 elements from a content array
+			var pagedItems = "";
+			var new_array_index = new_page_index * 2;
+			var max_new_elements = new_array_index + 2;
+			
+			for (var i = new_array_index; i < max_new_elements; i++) {
+				var tweet = null;
+				if (tweet = tweets[i]) {
+					pagedItems += '<div class="list_item">' + tweet.text + '</div>';
+				}
+			}
+			
+			$("#tweets .list").html(pagedItems);
+			
+		   return false;
+		}
+
+	$(document).ready(function() {
+		$("#tweets .pagination").pagination(tweets.length, {
+			items_per_page:2, 
+			callback:handlePaginationClick
+		});
+		handlePaginationClick(0,null);
+	});
+	</script>
 
 	<table width="450" border="0" cellspacing="0" cellpadding="0">
 		<tr>
@@ -78,8 +112,9 @@
 						Followers: $[TwitterUserSchema/followers_count] $[TwitterUserSchema/followers_link] 
 						Following: $[TwitterUserSchema/following_count] $[TwitterUserSchema/following_link]
 						<div id="tweets">
-							Tweets:
-							$[TwitterUserSchema/tweet_list]
+							<div class="header">Tweets:</div>
+							<div class="list"></div>
+							<div class="pagination"></div>
 						</div>
 					</div>
 					<div class="mb_borders">

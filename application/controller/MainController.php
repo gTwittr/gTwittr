@@ -143,12 +143,14 @@
 				}
 				$twitter_name = $this->twitter_service->getTwitterName();
 				//
-				$kmlValues['description'] = "Willkommen $twitter_name";	
-				$kmlValues['icon'] = $this->twitter_service->getIconUrl();
+				$kmlValues['description'] = "Willkommen $twitter_name";
+				$iconUrl = $this->twitter_service->getIconUrl();
+				$kmlValues['icon'] = GraphicService::getInstance()->generateProfileImage($iconUrl,COLOR_USER);
 				$kmlValues['followers'] = $followerCount;
 				$kmlValues['followersLink'] = link_tag('Link','main/followers.kml#start;balloonFlyto',true);
 				$kmlValues['following'] = $followingCount;
 				$kmlValues['followingLink'] = link_tag('Link','main/following.kml#start;balloonFlyto',true);
+				$kmlValues['overlay_path'] = GraphicService::getInstance()->generateInfoBarImage($iconUrl,$twitter_name,$followingCount,$followerCount);
 			} else {
 				addLocationToMap($this->location_service->findLocationByName('Wildeshausen'),$kmlValues);
 			}
@@ -164,12 +166,16 @@
 			//scope evtl. auf einen anderen user setzen
 			$user_id = getValueOrDefault($_GET['user_id'],-1);
 			$view = $this->getView('friends');
+			$view->icon_url = $this->twitter_service->getIconURL($user_id);
 			$userLocation = $this->twitter_service->getLocation($user_id);
 			$view->location = $userLocation;
 			$followers = $this->twitter_service->getFollowers($user_id);
+			//locations der followers anpassen, damit nicht alle auf einem haufen
 			LocationService::reArrangeLocation($userLocation,$followers);
 			$view->friends = $followers;
-			$view->header = "Follower";
+			
+			$view->iconBaseColor = COLOR_FOLLOWERS;
+			$view->header = "Followers";
 			
 			$view->lineStyleColor = 'ffff0000';
 			$view->polyStyleColor = 'ffffff00';
@@ -182,6 +188,8 @@
 			
 			$view = $this->getView('friends');
 			
+			$view->icon_url = $this->twitter_service->getIconURL($user_id);
+			
 			$userLocation = $this->twitter_service->getLocation($user_id);
 			$view->location = $userLocation;
 			
@@ -190,6 +198,7 @@
 			LocationService::reArrangeLocation($userLocation,$following);
 			
 			$view->friends = $following;
+			$view->iconBaseColor = COLOR_FOLLOWING;
 			$view->header = "Following";
 			
 			$view->lineStyleColor = 'ff00ffff';

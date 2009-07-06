@@ -64,6 +64,8 @@
 	
 	Identity::initIdentity();
 	
+	//die(Identity::getIdentity()->getTwitterId());
+	
 	$dispatcher = new Dispatcher(Registry::getInstance());
 	$dispatcher->setPath(BASE_PATH);
 	$dispatcher->dispatch();

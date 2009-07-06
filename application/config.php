@@ -14,7 +14,7 @@
 	
 	define('HOST_NAME',$_SERVER['HTTP_HOST']);
 	
-	define('COLOR_FOLLOWER', "rgb(0,64,128)");
+	define('COLOR_FOLLOWERS', "rgb(0,64,128)");
 	define('COLOR_FOLLOWING', "rgb(168,168,168)");
 	define('COLOR_USER', "rgb(255,124,0)");
 	define('IMAGE_CACHE_TIME', 3600);	//in seconds

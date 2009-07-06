@@ -110,9 +110,10 @@
 		
 		public function getTwitterName($user_id = -1) {
 			$user_data = $this->getUserInfo($user_id);
+			
 			$rVal = "";
-			if ($user_data && $user_data->error) {
-				$rVal = $user_data->name;
+			if ($user_data && !$user_data->error) {
+				$rVal = $user_data->screen_name;
 			}
 			return $rVal;
 		}

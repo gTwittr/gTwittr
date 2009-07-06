@@ -22,7 +22,7 @@
 				<color>ffffffff</color>
 		   	<scale>1.0</scale>
 		   	<Icon>
-					<href><?php echo $friend->icon_url; ?></href>
+					<href><?php echo GraphicService::getInstance()->generateProfileImage($friend->icon_url,$iconBaseColor); ?></href>
 		   	</Icon>
 			</IconStyle>	
 		</Style>
@@ -43,7 +43,7 @@
 			<color>ffffffff</color>
 		   <scale>1.0</scale>
 		   <Icon>
-				<href><?php echo $icon_url; ?></href>
+				<href><?php echo GraphicService::getInstance()->generateProfileImage($icon_url,COLOR_USER); ?></href>
 		   </Icon>
 		</IconStyle>
 		<?php include($balloonFriendListStylePath); ?>
@@ -155,13 +155,7 @@
 				<SimpleData name="tweet_list">
 					<![CDATA[
 						<?php
-							foreach($friend->tweets as $tweet) {
-						?>
-								<div class="list_item">
-									<?php echo $tweet->text; ?>
-								</div>
-						<?php
-							}
+							echo json_encode($friend->tweets);
 						?>
 					]]>
 				</SimpleData>

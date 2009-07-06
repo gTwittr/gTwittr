@@ -1,4 +1,4 @@
-<?php $imgPath = 'http://www.gewittr.local/application/views/images/placemark/'; ?>
+<?php $imgPath = 'http://' . HOST_NAME . '/application/views/images'; ?>
 <BalloonStyle>
   <!-- a background color for the balloon -->
   <bgColor>2d1E1E1E</bgColor>
@@ -48,6 +48,8 @@
 			font-weight:bold;
 		}
 	</style>
+	
+	<?php include(BASE_PATH . '/views/javascript/pagination.js'); ?>
 
 	<table width="450" border="0" cellspacing="0" cellpadding="0">
 		<tr>
