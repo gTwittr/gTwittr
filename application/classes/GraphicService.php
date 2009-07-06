@@ -16,7 +16,7 @@
 		
 		
 		public function __construct() {
-			if (exist_class('Imagick')) {
+			if (class_exists('Imagick')) {
 				$this->enabled = true;
 			}
 		}
@@ -27,37 +27,50 @@
 		
 		public function generateProfileImage($url, $color) {
 			
-			if ($this->isEnabled()) {
-				
-				$url = str_replace('\/','/',$url);
-				
-				$tmpname = './image_cache/' . $profile . '_' . md5($url . $color) . '.png';
-
-				if (file_exists($tmpname)) {
-					if(time() - filemtime($tmpname) < IMAGE_CACHE_TIME) {
-						return 'http://' . HOST_NAME . ltrim($tmpname, '.');
-					}else{
-						unlink($tmpname);
-					}
-				}
-
-				copy($url, $tmpname . '_tmp');
-
-				$borderColor = new ImagickPixel();
-				$borderColor->setColor($color);
-
-				$image = new Imagick($tmpname . '_tmp');
-				$image->thumbnailImage(48, 48);
-				$image->borderImage($borderColor, 3, 3);
-
-				$image->writeImage($tmpname);
-
-				unlink($tmpname . '_tmp');
-
-				return 'http://' . HOST_NAME . ltrim($tmpname, '.');	
-			} else {
-				return "";
+			$template_image = './data/';
+			
+			if ($color == COLOR_FOLLOWER) {
+				$template_image = $template_image . 'profile_follower.png';
+			}else if ($color == COLOR_FOLLOWING) {
+				$template_image = $template_image . 'profile_following.png';
+			}else if ($color == COLOR_USER) {
+				$template_image = $template_image . 'profile_user.png';
 			}
+			
+			if (! $this->isEnabled()) {
+				return $template_image . 'profile_default.png';
+			}
+				
+			$url = str_replace('\/','/',$url);
+			
+			$tmpname = './image_cache/' . $profile . '_' . md5($url . $color) . '.png';
+
+			if (file_exists($tmpname)) {
+				if(time() - filemtime($tmpname) < IMAGE_CACHE_TIME) {
+					return 'http://' . HOST_NAME . ltrim($tmpname, '.');
+				}else{
+					unlink($tmpname);
+				}
+			}
+
+			copy($url, $tmpname . '_tmp');
+
+			$borderColor = new ImagickPixel();
+			$borderColor->setColor($color);
+
+			$image = new Imagick($tmpname . '_tmp');
+			$image->thumbnailImage(48, 48);
+			//$image->borderImage($borderColor, 3, 3);
+			
+			$template = new Imagick($template_image);
+			$template->compositeImage($image, Imagick::COMPOSITE_DEFAULT, 5, 5);
+
+			$template->writeImage($tmpname);
+
+			unlink($tmpname . '_tmp');
+
+			return 'http://' . HOST_NAME . ltrim($tmpname, '.');	
+
 		}
 		
 		public function generateInfoBarImage($profileImageUrl, $screenName, $numFollowing, $numFollowers) {
