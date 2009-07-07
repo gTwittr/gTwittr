@@ -185,6 +185,20 @@
 					width: 412px;
 					float: left;
 				}
+				
+				.messageBox
+				{
+					width: 307px;
+					float: left;
+				}
+
+				.messageText
+				{
+					border-left: 1px solid #a5a5a5;
+					border-right: 1px solid #a5a5a5;
+					padding: 0 10px;
+
+				}
 
 				</style>
 
@@ -262,10 +276,23 @@
 							foreach($tweets as $tweet) {
 						?>
 							<div class="tweet">
-								<div class="text">
-									<?php echo $tweet->text; ?>
+								<div class="messageBox">
+									<div>
+										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleTop.gif'); ?>" width="307" height="12" />
+									</div>
+									<div class="messageText">
+										<?php echo $tweet->text; ?>
+									</div>
+									<div>
+										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleBottom.gif'); ?>" width="307" height="10" />
+									</div>
 								</div>
-								<?php echo link_tag('&raquo;',"tweets/show.kml?id=$tweet->id"); ?>
+								<div class="flag">
+									<img src="<?php print public_resource_url('images/sc-tweet_flag.gif'); ?>" width="15" height="11" />
+								</div>
+								<div class="clearfix"></div>
+								</div>
+								<?php //echo link_tag('&raquo;',"tweets/show.kml?id=$tweet->id"); ?>
 							</div>
 						<?php
 							}

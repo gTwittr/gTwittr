@@ -55,9 +55,11 @@
 
 		const ITEMS_PER_PAGE = 2;
 
-		var tweets = $[TwitterUserSchema/tweet_list];
-
 		function handlePaginationClick(new_page_index, pagination_container) {
+			
+			$("#tweets .list > div:visible").each(function(i,element) {
+				$(element).hide();
+			});
 			
 			// This selects 20 elements from a content array
 			var pagedItems = "";
@@ -65,22 +67,45 @@
 			var max_new_elements = new_array_index + ITEMS_PER_PAGE;
 			
 			for (var i = new_array_index; i < max_new_elements; i++) {
+				
+				if (tweets) {
+					var tweet = $(tweets).get(i);
+					if (tweet) {
+						$(tweet).show();
+					}
+				}
+				/*
 				var tweet = null;
 				if (tweet = tweets[i]) {
 					pagedItems += '<div class="list_item">' + tweet.text + '</div>';
-				}
+				}*/
 			}
 			
-			$("#tweets .list").html(pagedItems);
+			//$("#tweets .list").html(pagedItems);
 			
 		   return false;
 		}
 
+	var tweets = null;
+
 	$(document).ready(function() {
+		
+		tweets = $("#tweets .list > div");
+		$(tweets).each(function(i,element) {
+			$(element).hide();
+		});
+		
 		$("#tweets .pagination").pagination(tweets.length, {
 			items_per_page:ITEMS_PER_PAGE, 
 			callback:handlePaginationClick
 		});
+		
+		$('.avatar').hover(function() {
+			$(this).find('.nameOverlay').slideDown();
+		}, function() {
+			$(this).find('.nameOverlay').slideUp();
+		});
+		
 		handlePaginationClick(0,null);
 	});
 	</script>
@@ -115,7 +140,9 @@
 						Following: $[TwitterUserSchema/following_count] $[TwitterUserSchema/following_link]
 						<div id="tweets">
 							<div class="header">Tweets:</div>
-							<div class="list"></div>
+							<div class="list">
+								$[TwitterUserSchema/tweet_list]
+							</div>
 							<div class="pagination"></div>
 						</div>
 					</div>

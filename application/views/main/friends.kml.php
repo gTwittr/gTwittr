@@ -85,18 +85,18 @@
 				<SimpleData name="list">
 					<![CDATA[
 						<?php
-						$links = array();
-						
 						foreach($friends as $f) {
-							$friend = new stdClass();
-							$friend->screen_name = $f->screen_name;
-							$friend->link = "#friend_placemark_$f->twitter_id;balloonFlyto";
-							array_push($links,$friend);
-						}
-						
-						echo json_encode($links);
-						
 						?>
+							<div class="avatarContainer">
+								<div class="avatar" style="background:url('<?php echo $f->icon_url; ?>'); width:73px; height:73px; background-repeat: none;">
+									<a class="nameOverlay" href="#"><?php echo $f->screen_name; ?></a>
+								</div>
+								<?php echo link_tag('&raquo;',"#friend_placemark_$f->twitter_id;balloonFlyto",false,false); ?>
+							</div>
+						<?php	
+						}
+						?>
+						<div class="clearfix"></div>
 					]]>
 				</SimpleData>
 			</SchemaData>

@@ -176,7 +176,7 @@
 			$view->friends = $followers;
 			
 			$view->iconBaseColor = COLOR_FOLLOWERS;
-			$view->header = "Followers";
+			$view->header = "followers";
 			
 			$view->lineStyleColor = 'ffff0000';
 			$view->polyStyleColor = 'ffffff00';
@@ -200,7 +200,7 @@
 			
 			$view->friends = $following;
 			$view->iconBaseColor = COLOR_FOLLOWING;
-			$view->header = "Following";
+			$view->header = "following";
 			
 			$view->lineStyleColor = 'ff00ffff';
 			$view->polyStyleColor = 'ff0000ff';
