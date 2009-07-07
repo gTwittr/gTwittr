@@ -17,8 +17,9 @@
 		public function show() {
 			
 			$id = getValueOrDefault($_GET['tid'],-1);
-			
-			
+			$view = $this->getView('show');
+			$view->tweet = TwitterService::getInstance()->getTweet($id);
+			$view->show();
 			
 		}
 		

@@ -65,7 +65,7 @@
 				}
 			}
 			
-			return NULL;
+			return $this->findLocationByName($fallback_location);
 		}
 		
 		private function extractUrls($text) {

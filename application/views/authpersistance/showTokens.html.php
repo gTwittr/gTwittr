@@ -60,14 +60,9 @@
 	echo $filename;
 	*/
 	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
-	
-	$location = LocationService::getInstance()->extractLocation('just a location test. here http://maps.google.com/?q=52.9923%2C8.8138 i am.', '');
-	
-	if ($location == NULL) {
-		echo "no location available <br>";
-	}else{
-		echo $location;
-	}
+
+	$tweet = TwitterService::getInstance()->getTweet(2511769454);
+	var_dump($tweet);
 ?>
 
 

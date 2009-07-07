@@ -1,0 +1,104 @@
+<?php $imgPath = 'http://' . HOST_NAME . '/application/views/images/placemark/'; ?>
+<BalloonStyle>
+  <!-- a background color for the balloon -->
+  <bgColor>2d1E1E1E</bgColor>
+  <!-- styling of the balloon text -->
+  <text><![CDATA[
+	<style type="text/css">
+		
+		html,body {
+			min-width: 400px;
+			min-height: 250px;
+			overflow: hidden;
+			background-color: #1e1e1e;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.container {
+		
+			font-family: Georgia, "Times New Roman", Times, serif;
+			font-size: 24px;
+			font-weight: normal;
+			color: #000;
+		}
+		
+		.sidenav{
+			height: 168px;
+			width:111px;
+			float:left;
+		}
+		
+		.btns{
+			width:33px;
+			padding-top:10px;
+			padding-bottom:20px;
+		}
+		.mb_borders {
+			height: 10px;
+			width: 286px;
+		}
+		
+		.mb_text {
+			background:#FFF;
+			width:256px;
+			height:250px;
+			padding:5px 15px;
+		}
+		
+		.messageBox{
+			width:286px;
+			float:left;
+		}
+		.text_reply{
+			color:#504c4c
+		}
+		
+		.text_sender{
+			color:#ffba0f;
+			font-weight:bold;
+		}
+	</style>
+	
+	<?php include(BASE_PATH . '/views/javascript/pagination.js'); ?>
+	
+
+	<table width="450" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td>
+			<div class="container">
+				<div class="sidenav">
+					<div>
+						<img src="<?php echo $imgPath; ?>bird.png" width="111" height="68" />
+					</div>
+					<div class="btns" style="float:left">
+						<img src="<?php echo $imgPath; ?>prev_btn.png" width="33" height="28" />
+					</div>
+					<div class="btns" style="float:left; padding-left:30px">
+						<img src="<?php echo $imgPath; ?>next_btn.png" width="33" height="28" />
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<div class="messageBox">
+					<div class="mb_borders">
+						<img src="<?php echo $imgPath; ?>msg_top.png" width="286" height="10" />
+					</div>
+					<div class="mb_text">
+						<div class="text_sender">$[TweetDataSchema/screen_name]</div>
+						$[TweetDataSchema/text]
+					</div>
+					<div class="mb_borders">
+						<img src="<?php echo $imgPath; ?>msg_bottom.png" width="286" height="10" />
+					</div>
+				</div>
+				<div style="clear:both"></div>
+			</div>
+			</td>
+		</tr>
+		<tr>
+		<td>&nbsp;</td>
+		</tr>
+	</table>
+  ]]>
+  </text>
+</BalloonStyle>

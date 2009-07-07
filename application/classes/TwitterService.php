@@ -230,6 +230,8 @@
 			$tweet->created_at = $twitter_data->created_at;
 			$tweet->location = LocationService::getInstance()->extractLocation($tweet->text, $twitter_data->user->location);
 			$tweet->screen_name = $twitter_data->user->screen_name;
+			$tweet->icon_url = GraphicService::getInstance()->generateProfileImage($twitter_data->user->profile_image_url,COLOR_USER);
+			
 			
 			return $tweet;
 		}

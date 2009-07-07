@@ -41,3 +41,11 @@
 		<displayName><![CDATA[]]></displayName>
 	</SimpleField>
 </Schema>
+<Schema name="TweetDataSchema" id="TweetSchema">
+	<SimpleField type="string" id="screen_name">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+	<SimpleField type="string" id="text">
+		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+</Schema>
