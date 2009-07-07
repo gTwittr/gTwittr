@@ -33,17 +33,44 @@
 		public function findLocation($text) {
 			$rVal = new Location(0,0,0);
 			if ($text && !empty($text)) {
-				$coords = preg_split('/^.*(-?[0-9]\.[0-9]),(-?[0-9]\.[0-9]).*$/', $text);
-				$lng = $coords[0];
-				$lat = $coords[1];
+				/*$coords = preg_split('/^.*(-?[0-9]\.[0-9]),(-?[0-9]\.[0-9]).*$/', $text);
+				$lat = $coords[0];
+				$lon = $coords[1];
 				$rVal = new Location($lng,$lat,0);
+				*/
+				
+				preg_match_all('/[-+]?([0-9]{1,3}\.[0-9]+)/i', $text, $geo);
+				$rVal = new Location($geo[0][1], $geo[0][0], 0.0);
 			}
 			return $rVal;
 		}
 		
-		//TO-DO
+	
+		//returns NULL if there is no location - returns the first location if there is more than one
 		public function extractLocation($text, $fallback_location) {
-			return $this->findLocationByName($fallback_location);
+			
+			$urls = $this->extractUrls($text);
+			
+			$count = count($urls);
+			for ($i=0; $i < $count; $i++) {
+				$url = $urls[$i];
+				$loc = GeoUrlService::getInstance()->shortUrlToLocation($url);
+				if ($loc == NULL) {
+					$loc = GeoUrlService::getInstance()->urlToLocation($url);
+					if ($loc != NULL) {
+						return $loc;
+					}
+				}else{
+					return $loc;
+				}
+			}
+			
+			return NULL;
+		}
+		
+		private function extractUrls($text) {
+			preg_match_all('/\b(?:(?:https?):\/\/|www\.)[-A-Z0-9+&@#\/%=~_|$?!:,.]*[A-Z0-9+&@#\/%=~_|$]/i', $text, $result);
+			return $result[0];
 		}
 		
 		private function queryGeonamesService($url) {

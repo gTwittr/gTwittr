@@ -49,8 +49,8 @@
 	//$filename = GraphicService::getInstance()->generateProfileImage('http://static.twitter.com/images/default_profile_normal.png', COLOR_FOLLOWING);
 	
 	
-	$filename = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/290530654/penner_normal.jpg', COLOR_FOLLOWERS);
-	/*
+	/*$filename = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/290530654/penner_normal.jpg', COLOR_FOLLOWERS);
+	
 	$filename2 = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/60498760/Bild_224-1_normal.jpg', COLOR_FOLLOWING);
 	
 	$filename3 = GraphicService::getInstance()->generateProfileImage('http://s3.amazonaws.com/twitter_production/profile_images/69546449/2793452349_794ae79227_mini_studi_normal.jpg', COLOR_USER);
@@ -60,6 +60,14 @@
 	echo $filename;
 	*/
 	//GeoUrlService::getInstance()->shortUrlToLocation('http://bit.ly/gmnl0');
+	
+	$location = LocationService::getInstance()->extractLocation('just a location test. here http://maps.google.com/?q=52.9923%2C8.8138 i am.', '');
+	
+	if ($location == NULL) {
+		echo "no location available <br>";
+	}else{
+		echo $location;
+	}
 ?>
 
 
