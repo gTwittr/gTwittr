@@ -3,10 +3,105 @@ html, body {
 	padding: 0;
 	background: #FFF;
 	font-family: Sans-Serif;
+	/*background-color:#484848;*/
+	background-color: #252525;
 }
 
-div#body {
-	width: 800px;
-	margin-left: auto;
-	margin-right: auto;
+body 
+{ 
+	 text-align: center; 
+} 
+
+#wrapper 
+{ 
+	 margin: 0 auto; 
+	 padding: 0; 
+	 width: 960px; 
+	 text-align: left;
+	 background-color:#484848;
+} 
+
+#header
+{
+	margin: 0 0 2px 0;
+}
+
+/* NAVIGATION STYLE */
+
+ul.nav,
+.nav ul{
+/*Remove all spacings from the list items*/
+	margin: 0;
+	padding: 0;
+	cursor: default;
+	list-style-type: none;
+	display: inline;
+}
+
+ul.nav{
+	display: table;
+}
+ul.nav>li{
+	display: table-cell;
+	position: relative;
+	padding:0 10px;
+	
+}
+
+.nav ul li a{
+/*Make the hyperlinks as a block element, sort of a hover effect*/
+	display: block;
+	padding: 0 10px;
+}
+
+/*** Menu colors (customizable) ***/
+
+ul.nav,
+.nav ul,
+.nav ul li a{
+	background-image:url('../images/tab_normal.gif');
+	color: #272727;
+}
+
+
+ul.nav li:hover,
+.nav ul li a:hover{
+	background-image:url('../images/tab_hover.gif');
+	color: #272727;
+}
+
+ul.nav li:active,
+.nav ul li a:active{
+	background-color: #fff;
+	color: #272727;
+}
+
+ul.nav,
+.nav ul{
+	border: none;
+	height:36px;
+	line-height:36px;
+}
+
+.nav a{
+	text-decoration: none;
+}
+
+/* END NAVIGATION STYLE */
+
+#content
+{
+	background-color:#FFF;
+	margin: 0 0 2px 0;
+	padding: 10px 5px;
+}
+
+#footer
+{
+	background-color:#101010;
+	height:30px;
+	text-align:center;
+	color:#c3c3c9;
+	font-size:11px;
+	line-height:30px;
 }

@@ -139,5 +139,9 @@
 	function absolute_full_url($url) {
 		return 'http://' . HOST_NAME . '/' . Identity::getIdentity()->getSessionId() . '/' . $url;
 	}
+	
+	function public_resource_url($path) {
+		return 'http://' . HOST_NAME . '/public/' . $path;
+	}
 
 ?>

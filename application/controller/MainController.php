@@ -119,45 +119,46 @@
 			$view = $this->getView('start');
 			$view->authenticated = false;
 			
-			$kmlValues = array();
-			$kmlValues['name'] = 'Test';
-			
 			if ($this->twitter_service->isAuthenticated()) {
 				$view->authenticated = true;
 				
-				$myLocation = $this->twitter_service->getLocation();
-				$following = $this->twitter_service->getFollowing();
-				$followers = $this->twitter_service->getFollowers();
+				$user_data = $this->twitter_service->getUserData();
 				
-				addLocationToMap($myLocation,$kmlValues);
+				$myLocation = $user_data->location;
+				$following = $this->twitter_service->getFollowing($user_data->twitter_id);
+				$followers = $this->twitter_service->getFollowers($user_data->twitter_id);
+				
+				$view->location = $myLocation;
 				
 				//following
-				$followingCount = 0;
-				if ($following) {
-					$followingCount = count($following);
+				$followingCount = $user_data->following_count;
+				$followerCount = $user_data->followers_count;
+				$screen_name = $user_data->screen_name;
+				$view->screen_name = $screen_name;
+				
+				if (!($view->web_url = $user_data->url)) {
+					$view->web_url = 'http://www.twitter.com';
 				}
-				//followers
-				$followerCount = 0;
-				if ($followers) {
-					$followerCount = count($followers);
+				
+				if (!($view->description = $user_data->description)) {
+					$view->description = '';
 				}
-				$twitter_name = $this->twitter_service->getTwitterName();
-				//
-				$kmlValues['description'] = "Willkommen $twitter_name";
-				$iconUrl = $this->twitter_service->getIconUrl();
-				$kmlValues['icon'] = GraphicService::getInstance()->generateProfileImage($iconUrl,COLOR_USER);
-				$kmlValues['followers'] = $followerCount;
-				$kmlValues['followersLink'] = link_tag('Link','main/followers.kml#start;balloonFlyto',true);
-				$kmlValues['following'] = $followingCount;
-				$kmlValues['followingLink'] = link_tag('Link','main/following.kml#start;balloonFlyto',true);
-				$kmlValues['overlay_path'] = GraphicService::getInstance()->generateInfoBarImage($iconUrl,$twitter_name,$followingCount,$followerCount);
+				
+				$view->tweets = $user_data->tweets;
+				
+				$iconUrl = $user_data->icon_url;
+				$view->icon_url_plain = $iconUrl;
+				$view->icon_url = GraphicService::getInstance()->generateProfileImage($iconUrl,COLOR_USER);
+				
+				$view->followers_count = $followerCount;
+				$view->followers_link = link_tag('Followers','main/followers.kml#start;balloonFlyto',true);
+				
+				$view->following_count = $followingCount;
+				$view->following_link = link_tag('Following','main/following.kml#start;balloonFlyto',true);
+				$view->overlay_path = GraphicService::getInstance()->generateInfoBarImage($iconUrl,$screen_name,$followingCount,$followerCount);
 			} else {
-				addLocationToMap($this->location_service->findLocationByName('Wildeshausen'),$kmlValues);
+				$view->location = $this->location_service->findLocationByName('Wildeshausen');
 			}
-			
-			
-			
-			$view->kmlValues = $kmlValues;
 			
 			$view->show();
 		}

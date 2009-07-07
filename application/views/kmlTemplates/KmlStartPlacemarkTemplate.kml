@@ -20,8 +20,11 @@
 		  <bgColor>2d1E1E1E</bgColor>
 		  <!-- styling of the balloon text -->
 		  <text><![CDATA[
-		<style type="text/css">
+		
 		<!--
+		
+		<style type="text/css">
+		
 		.container {
 
 			font-family: Georgia, "Times New Roman", Times, serif;
@@ -64,7 +67,6 @@
 			color:#ffba0f;
 			font-weight:bold;
 		}
-		-->
 		</style>
 
 		<table width="450" border="0" cellspacing="0" cellpadding="0">
@@ -97,7 +99,147 @@
 			<td>&nbsp;</td>
 			</tr>
 		</table>
-		  ]]></text>
+		
+		-->
+		
+		<style type="text/css">
+			<!--
+
+			html,body {
+				overflow:hidden;
+				background-color: #1e1e1e;
+			}
+
+			body {	
+				margin:0px; padding:0px;
+			}
+
+			ul
+			{
+			margin: 0;
+			padding: 0;
+			}
+
+			li
+			{
+				list-style: none;
+			}
+
+			.clearfix
+			{
+			 clear: both;
+			}
+
+			.container {
+
+				font-family: Georgia, "Times New Roman", Times, serif;
+				font-size: 24px;
+				font-weight: normal;
+				color: #000;
+			}
+
+			.footer {
+				height: 56 px;
+				text-align:center;
+				/*margin-top: -30px;*/
+			}
+
+			.profile
+			{
+				background-color: #FFF;
+				font-size: 14px;
+				float: left;
+				padding:0 0 10px 10px;
+			}
+
+			.profile div 
+			{
+				float: left;
+			}
+
+			.profile div ul
+			{
+				width: 309px;
+				padding: 0 10px;
+			}
+
+			.menuOptions {
+				width: 412px;
+				background-color:#FFF;
+				float: left;
+			}
+
+			.menuOptions li {
+			height: 49px;
+			text-transform: uppercase;
+			text-align: center;
+			line-height: 48px;
+			border-top-width: 1px;
+			border-top-style: solid;
+			border-top-color: #e3e3e3;	
+			display: block;
+			}
+
+			.menuOptions li a {
+				display: block;
+			}
+
+			.menuOptions li a:hover {
+				display: block;
+				background-color: #f5f5f5;
+			}
+
+			.text_reply{
+				color:#504c4c
+			}
+
+			.text_sender{
+				color:#ffba0f;
+				font-weight:bold;
+			}
+
+			a {
+				color: #ffba0f;
+				text-decoration: none;
+			}
+
+			-->
+			</style>
+
+					<div class="container">
+
+						<div><img src="files/sc-over_01.gif" width="412" height="82" />
+						</div>
+
+						<div class="profile">
+							<div><img src="files/me_avatar.jpg" width="73" height="73" />
+							</div>
+							<div>
+								<ul>
+									<li><b>Name:</b> $name</li>
+									<li><b>Location:</b> $location</li>
+									<li><b>Web:</b> <a href="#">$url</a></li>
+									<li><b>Bio:</b> $fasdfasdfjkadshg    sadjhfgajdshgfjasgd agsdj jg ajsfd gjkasgd jkasgd fkjasg jkg jksadg jkagsd f gj fgfak jsgfj asgjkgd </li>
+								</ul>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="menuOptions">
+							<ul>
+								<li><a href="#">Recent Tweets</a></li>
+								<li><a href="#">Followers</a></li>
+								<li><a href="#">Following</a></li>
+							</ul>
+						</div>
+						<div class="footer">
+							<img src="<?php print public_resource_url('images/overview/sc-over_02.gif'); ?>" width="412" height="10" /><br />
+							<img src="files/sc-over_03.gif" width="124" height="46" />
+						</div>
+
+					</div>
+		
+		  		]]>
+			</text>
 		</BalloonStyle>
 		<IconStyle>
 			<color>ffffffff</color>

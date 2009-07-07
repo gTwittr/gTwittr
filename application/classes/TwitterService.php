@@ -198,23 +198,22 @@
 					$user_location = LocationService::getInstance()->findLocationByName($twitter_data->location);
 				}
 				$rVal->location = $user_location;
+				$rVal->location_name = $twitter_data->location;
 				$rVal->icon_url = $twitter_data->profile_image_url;
 				$rVal->screen_name = $twitter_data->screen_name;
 				$rVal->verified = $twitter_data->verified;
 				$rVal->description = $twitter_data->description;
 				$rVal->following_count = $twitter_data->friends_count;
 				$rVal->followers_count = $twitter_data->followers_count;
+				$rVal->url = $twitter_data->url;
 				$rVal->tweets = $this->getUserTimelineTweets($rVal->twitter_id);
 			}
 			return $rVal;
 		}
 		
 		public function getUserData($user_id=-1) {
-			$rVal = null;
-			if ($user_id != -1) {
-				$twitter_data = $this->getUserInfo($user_id);
-				$rVal = $this->buildUser($twitter_data);
-			}
+			$twitter_data = $this->getUserInfo($user_id);
+			$rVal = $this->buildUser($twitter_data);
 			return $rVal;
 		}
 		
@@ -283,19 +282,6 @@
 						array_push($rVal, $user_object);	
 					}
 				}
-			}
-			return $rVal;
-		}
-		
-		public function getPublicTimelineTweets() {
-			$result = $this->callTwitter('https://twitter.com/statuses/public_timeline.json');
-			$rVal = array();
-			
-			foreach($result as $t) {
-				
-				$tweet = new Tweet($t->text,LocationService::getInstance()->findLocation($t->user->location));
-				
-				array_push($rVal, $tweet);
 			}
 			return $rVal;
 		}
