@@ -128,11 +128,13 @@
 		}
 		
 		public function callTwitter($url, $method = 'GET', $authenticate = true, $caching = true) {
+		
 			if ($caching) {
 				if ($json_data = $this->cache->get($url)) {
 					return json_decode($json_data);
 				}
 			}
+			
 			// Zur Entwicklung wird nicht OAuth genutzt, da der Mechanismus lokal nicht funktioniert
 			if (ENVIRONMENT == DEVELOPMENT) {
 				$curl = curl_init();
@@ -215,6 +217,21 @@
 			$twitter_data = $this->getUserInfo($user_id);
 			$rVal = $this->buildUser($twitter_data);
 			return $rVal;
+		}
+		
+		public function getTweet($tweet_id) {
+			$rVal = array();
+			$url = "http://twitter.com/statuses/show/$tweet_id.json";
+			$twitter_data = $this->callTwitter($url);
+			
+			$tweet = new stdClass();
+			$tweet->id = $twitter_data->id;
+			$tweet->text = $twitter_data->text;
+			$tweet->created_at = $twitter_data->created_at;
+			$tweet->location = LocationService::getInstance()->extractLocation($tweet->text, $twitter_data->user->location);
+			$tweet->screen_name = $twitter_data->user->screen_name;
+			
+			return $tweet;
 		}
 		
 		public function getBlockedUserIds() {
