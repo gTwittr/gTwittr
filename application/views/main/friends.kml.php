@@ -85,13 +85,17 @@
 				<SimpleData name="list">
 					<![CDATA[
 						<?php
-						foreach($friends as $friend) {
-						?>
-						<div class="list_item">
-							<?php echo link_tag($friend->screen_name,"#friend_placemark_$friend->twitter_id;balloonFlyto",false,false); ?>
-						</div>
-						<?php
+						$links = array();
+						
+						foreach($friends as $f) {
+							$friend = new stdClass();
+							$friend->screen_name = $f->screen_name;
+							$friend->link = "#friend_placemark_$f->twitter_id;balloonFlyto";
+							array_push($links,$friend);
 						}
+						
+						echo json_encode($links);
+						
 						?>
 					]]>
 				</SimpleData>

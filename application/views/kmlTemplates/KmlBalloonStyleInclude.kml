@@ -1,4 +1,4 @@
-<?php $imgPath = 'http://www.gewittr.local/application/views/images/placemark/'; ?>
+<?php $imgPath = 'http://' . HOST_NAME . '/application/views/images/placemark/'; ?>
 <BalloonStyle>
   <!-- a background color for the balloon -->
   <bgColor>2d1E1E1E</bgColor>
@@ -53,14 +53,16 @@
 	
 	<script type="text/javascript" charset="utf-8">
 
+		const ITEMS_PER_PAGE = 2;
+
 		var tweets = $[TwitterUserSchema/tweet_list];
 
 		function handlePaginationClick(new_page_index, pagination_container) {
 			
 			// This selects 20 elements from a content array
 			var pagedItems = "";
-			var new_array_index = new_page_index * 2;
-			var max_new_elements = new_array_index + 2;
+			var new_array_index = new_page_index * ITEMS_PER_PAGE;
+			var max_new_elements = new_array_index + ITEMS_PER_PAGE;
 			
 			for (var i = new_array_index; i < max_new_elements; i++) {
 				var tweet = null;
@@ -76,7 +78,7 @@
 
 	$(document).ready(function() {
 		$("#tweets .pagination").pagination(tweets.length, {
-			items_per_page:2, 
+			items_per_page:ITEMS_PER_PAGE, 
 			callback:handlePaginationClick
 		});
 		handlePaginationClick(0,null);

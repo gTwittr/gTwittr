@@ -1,4 +1,4 @@
-<?php $imgPath = 'http://' . HOST_NAME . '/application/views/images'; ?>
+<?php $imgPath = 'http://' . HOST_NAME . '/application/views/images/placemark/'; ?>
 <BalloonStyle>
   <!-- a background color for the balloon -->
   <bgColor>2d1E1E1E</bgColor>
@@ -50,6 +50,42 @@
 	</style>
 	
 	<?php include(BASE_PATH . '/views/javascript/pagination.js'); ?>
+	
+	<script type="text/javascript" charset="utf-8">
+
+		const ITEMS_PER_PAGE = 2;
+
+		var friends = $[FriendOverviewSchema/list];
+
+		function handlePaginationClick(new_page_index, pagination_container) {
+			
+			// This selects 20 elements from a content array
+			var pagedItems = "";
+			var new_array_index = new_page_index * ITEMS_PER_PAGE;
+			var max_new_elements = new_array_index + ITEMS_PER_PAGE;
+			
+			for (var i = new_array_index; i < max_new_elements; i++) {
+				var friend = null;
+				if (friend = friends[i]) {
+					pagedItems += '<div class="list_item">' + friend.screen_name + ' <a href="' + friend.link + '">&raquo;</a>' + friend.link + '</div>';
+				}
+			}
+			
+			$("#friends .list").html(pagedItems);
+			
+		   return false;
+		}
+		
+	$(document).ready(function() {
+		$("#friends .pagination").pagination(friends.length, {
+			prev_text:"&laquo",
+			next_text:"&raquo;",
+			items_per_page:ITEMS_PER_PAGE, 
+			callback:handlePaginationClick
+		});
+		handlePaginationClick(0,null);
+	});
+	</script>
 
 	<table width="450" border="0" cellspacing="0" cellpadding="0">
 		<tr>
@@ -76,7 +112,11 @@
 					</div>
 					<div class="mb_text">
 						<div class="text_sender">$[FriendOverviewSchema/header]</div>
-						$[FriendOverviewSchema/list]
+						<div id="friends">
+							<div class="header"></div>
+							<div class="list"></div>
+							<div class="pagination"></div>
+						</div>
 					</div>
 					<div class="mb_borders">
 						<img src="<?php echo $imgPath; ?>msg_bottom.png" width="286" height="10" />

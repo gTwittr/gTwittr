@@ -133,7 +133,11 @@
 	}
 	
 	function absolute_url($url) {
-		return HOST_NAME . '/' . $url;
+		return 'http://' . HOST_NAME . '/' . $url;
+	}
+	
+	function absolute_full_url($url) {
+		return 'http://' . HOST_NAME . '/' . Identity::getIdentity()->getSessionId() . '/' . $url;
 	}
 
 ?>

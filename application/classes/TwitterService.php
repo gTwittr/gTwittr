@@ -176,6 +176,7 @@
 			if ($twitter_data && !$twitter_data->error) {
 				foreach($twitter_data as $status) {
 					$tweet = new stdClass();
+					$tweet->id = $status->id;
 					$tweet->text = $status->text;
 					$tweet->created_at = $status->created_at;
 					$tweet->location = LocationService::getInstance()->extractLocation($tweet->text, $twitter_data->user->location);

@@ -11,10 +11,15 @@
 		**/
 		public function latest() {
 			$view = $this->getView('latest');
-			
-			
-			
 			$view->show();
+		}
+		
+		public function show() {
+			
+			$id = getValueOrDefault($_GET['tid'],-1);
+			
+			
+			
 		}
 		
 	}

@@ -211,6 +211,12 @@
 			
 		}
 		
+		public function main() {
+			$view = $this->getView('main');
+			
+			$view->show();
+		}
+		
 	}
 
 ?>
