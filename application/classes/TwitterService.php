@@ -199,7 +199,7 @@
 				}
 				$rVal->location = $user_location;
 				$rVal->location_name = $twitter_data->location;
-				$rVal->icon_url = $twitter_data->profile_image_url;
+				$rVal->icon_url = preg_replace('/(.+)_normal\.(\w+)/','$1_bigger.$2',$twitter_data->profile_image_url);
 				$rVal->screen_name = $twitter_data->screen_name;
 				$rVal->verified = $twitter_data->verified;
 				$rVal->description = $twitter_data->description;

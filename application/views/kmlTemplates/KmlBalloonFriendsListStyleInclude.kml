@@ -3,49 +3,96 @@
   <!-- a background color for the balloon -->
   <bgColor>2d1E1E1E</bgColor>
   <!-- styling of the balloon text -->
-  <text><![CDATA[
+  <text>
+	<![CDATA[
 	<style type="text/css">
+		html,body {
+			min-width: 400px;
+			min-height: 200px;
+			overflow: hidden;
+			background-color: #1e1e1e;
+		}
+
+		body {	
+			margin:0px; padding:0px;
+		}
+
+		.clearfix
+		{
+		 clear: both;
+		}
+
 		.container {
-		
+
 			font-family: Georgia, "Times New Roman", Times, serif;
-			font-size: 24px;
-			font-weight: normal;
+			font-size: 17px;
+			font-weight: bold;
 			color: #000;
 		}
-		
-		.sidenav{
-			height: 168px;
-			width:111px;
-			float:left;
+
+		.footer {
+			height: 56 px;
+			text-align:center;
+			/*margin-top: -30px;*/
+		}
+
+		#imageGrid
+		{
+			width: 387px;
+			background-color: #FFF;
+			padding: 0 12px 10px 13px;
+		}
+
+		.avatarContainer
+		{
+			margin: 2.5px;
+			float: left;
+		}
+
+		.avatar
+		{
+			position: relative;
+		}
+
+		.nameOverlay
+		{
+		width: 73px;
+		font-size: 11px;
+		font-weight: normal;
+		display: none;
+		text-align: center;
+		position: absolute;
+		line-height: 25px;
+		bottom: 0;
+		background: #000;
+		opacity: 1;
+		white-space: pre;
+		}
+
+		a {
+			color: #ffba0f;
+			text-decoration: none;
+		}
+
+		#pagination
+		{
+			background-color: #FFF;
+			text-align: center;
+			color: #504c4c;
+		}
+
+		#pagination a
+		{
+			padding: 0 2px;
+		}
+
+		#pagination .active
+		{
+			padding: 0 2px;
 		}
 		
-		.btns{
-			width:33px;
-			padding-top:10px;
-			padding-bottom:20px;
-		}
-		.mb_borders {
-			height: 10px;
-			width: 286px;
-		}
-		
-		.mb_text {
-			background:#FFF;
-			width:256px;
-			padding:5px 15px;
-		}
-		
-		.messageBox{
-			width:286px;
-			float:left;
-		}
-		.text_reply{
-			color:#504c4c
-		}
-		
-		.text_sender{
-			color:#ffba0f;
-			font-weight:bold;
+		div.footer {
+			width: 412px;
 		}
 	</style>
 	
@@ -53,11 +100,13 @@
 	
 	<script type="text/javascript" charset="utf-8">
 
-		const ITEMS_PER_PAGE = 2;
-
-		var friends = $[FriendOverviewSchema/list];
+		const ITEMS_PER_PAGE = 10;
 
 		function handlePaginationClick(new_page_index, pagination_container) {
+			
+			$("#imageGrid > div:visible").each(function(i,element) {
+				$(element).hide();
+			});
 			
 			// This selects 20 elements from a content array
 			var pagedItems = "";
@@ -65,71 +114,63 @@
 			var max_new_elements = new_array_index + ITEMS_PER_PAGE;
 			
 			for (var i = new_array_index; i < max_new_elements; i++) {
-				var friend = null;
-				if (friend = friends[i]) {
-					pagedItems += '<div class="list_item">' + friend.screen_name + ' <a href="' + friend.link + '">&raquo;</a>' + friend.link + '</div>';
+				
+				if (friends) {
+					var friend = $(friends).get(i);
+					if (friend) {
+						$(friend).show();
+					}
 				}
 			}
-			
-			$("#friends .list").html(pagedItems);
-			
 		   return false;
 		}
 		
+	var friends = null;
+		
 	$(document).ready(function() {
-		$("#friends .pagination").pagination(friends.length, {
+		
+		friends = $("#imageGrid > div");
+		$(friends).each(function(i,element) {
+			$(element).hide();
+		});
+		
+		if (!friends) {
+			return false;
+		}
+		
+		$("#pagination").pagination(friends.length, {
 			prev_text:"&laquo",
 			next_text:"&raquo;",
 			items_per_page:ITEMS_PER_PAGE, 
 			callback:handlePaginationClick
 		});
+		
+		$('.avatar').hover(function() {
+			$(this).find('.nameOverlay').slideDown();
+		}, function() {
+			$(this).find('.nameOverlay').slideUp();
+		});
+		
 		handlePaginationClick(0,null);
 	});
 	</script>
 
-	<table width="450" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td>
-			<div class="container">
-				<div class="sidenav">
-					<div>
-						<img src="<?php echo $imgPath; ?>bird.png" width="111" height="68" />
-					</div>
-					<div class="btns" style="float:left">
-						<img src="<?php echo $imgPath; ?>prev_btn.png" width="33" height="28" />
-					</div>
-					<div class="btns" style="float:left; padding-left:30px">
-						<img src="<?php echo $imgPath; ?>next_btn.png" width="33" height="28" />
-					</div>
-					<div>
-						<img src="<?php echo $imgPath; ?>overview_btn.png" width="96" height="27" />
-					</div>
-					<div style="clear:both"></div>
-				</div>
-				<div class="messageBox">
-					<div class="mb_borders">
-						<img src="<?php echo $imgPath; ?>msg_top.png" width="286" height="10" />
-					</div>
-					<div class="mb_text">
-						<div class="text_sender">$[FriendOverviewSchema/header]</div>
-						<div id="friends">
-							<div class="header"></div>
-							<div class="list"></div>
-							<div class="pagination"></div>
-						</div>
-					</div>
-					<div class="mb_borders">
-						<img src="<?php echo $imgPath; ?>msg_bottom.png" width="286" height="10" />
-					</div>
-				</div>
-				<div style="clear:both"></div>
-			</div>
-			</td>
-		</tr>
-		<tr>
-		<td>&nbsp;</td>
-		</tr>
-	</table>
+	<div class="container">
+		
+		
+	
+		<div><img src="<?php print public_resource_url('images/friends/sc-$[FriendOverviewSchema/header]_01.gif'); ?>" width="412" height="82" />
+		</div>
+		<div id="imageGrid">$[FriendOverviewSchema/list]</div>
+		
+		<div id="pagination"></div>
+						
+		<div class="footer">
+			<img src="<?php print public_resource_url('images/friends/sc-tweet_02.gif'); ?>" width="412" height="10" /><br />
+			<img src="<?php print public_resource_url('images/friends/sc-tweet_03.gif'); ?>" width="124" height="46" />
+		</div>
+		
+	</div>
   ]]>
   </text>
 </BalloonStyle>

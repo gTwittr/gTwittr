@@ -28,7 +28,7 @@
 	}
 	
 	//cache optionen setzen
-	define('CACHE_OPTS_ENABLE',false);
+	define('CACHE_OPTS_ENABLE',true);
 	define('CACHE_OPTS_DIR','./tmp/');
 	define('CACHE_OPTS_LIFETIME',3600);
 	
