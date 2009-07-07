@@ -124,21 +124,28 @@
 					padding: 0 10px;
 				}
 				
-				div.recent_tweets {
+				div#recent_tweets {
 					width: 412px;
 					background-color:#FFF;
 					float: left;
 				}
 				
-				div.recent_tweets > div {
+				div#recent_tweets > div {
 					text-align: center;
-					border-top-width: 1px;
-					border-top-style: solid;
-					border-top-color: #e3e3e3;
+					border: 0;
+				}
+				
+				div#pagination {
+					width: 412px;
+					background-color:#FFF;
+					float: left;
+					text-align: center;
 				}
 				
 				div.tweet {
-					display: block;
+					width: 412px;
+					background-color: #FFF;
+					padding-bottom: 10px;
 				}
 				
 				div.menuOptions {
@@ -190,8 +197,17 @@
 				{
 					width: 307px;
 					float: left;
+					margin: 5px;
+					margin-left: 25px;
 				}
-
+				
+				.flag
+				{
+					float:left;
+					padding: 15px 0 0 5px;
+					margin-left: -330px;
+				}
+				
 				.messageText
 				{
 					border-left: 1px solid #a5a5a5;
@@ -201,6 +217,59 @@
 				}
 
 				</style>
+				
+				<?php include(BASE_PATH . '/views/javascript/pagination.js'); ?>
+				
+				<script type="text/javascript" charset="utf-8">
+
+					const ITEMS_PER_PAGE = 2;
+
+					function handlePaginationClick(new_page_index, pagination_container) {
+
+						$("#recent_tweets > div:visible").each(function(i,element) {
+							$(element).hide();
+						});
+
+						// This selects 20 elements from a content array
+						var pagedItems = "";
+						var new_array_index = new_page_index * ITEMS_PER_PAGE;
+						var max_new_elements = new_array_index + ITEMS_PER_PAGE;
+
+						for (var i = new_array_index; i < max_new_elements; i++) {
+
+							if (tweets) {
+								var tweet = $(tweets).get(i);
+								if (tweet) {
+									$(tweet).show();
+								}
+							}
+						}
+					   return false;
+					}
+
+				var tweets = null;
+
+				$(document).ready(function() {
+
+					tweets = $("#recent_tweets > div");
+					$(tweets).each(function(i,element) {
+						$(element).hide();
+					});
+
+					if (!tweets) {
+						return false;
+					}
+
+					$("#pagination").pagination(tweets.length, {
+						prev_text:"&laquo",
+						next_text:"&raquo;",
+						items_per_page:ITEMS_PER_PAGE, 
+						callback:handlePaginationClick
+					});
+
+					handlePaginationClick(0,null);
+				});
+			</script>
 
 						<div class="container">
 
@@ -221,8 +290,10 @@
 								</div>
 								<div class="clearfix"></div>
 							</div>
-							<div class="recent_tweets">
+							<div id="recent_tweets">
 								$[StartOverviewSchmema/tweets_list]
+							</div>
+							<div id="pagination">
 							</div>
 							<div class="menuOptions">
 								<ul>
@@ -281,18 +352,17 @@
 										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleTop.gif'); ?>" width="307" height="12" />
 									</div>
 									<div class="messageText">
-										<?php echo $tweet->text; ?>
+										<?php echo $tweet->text; ?><br />
+										<?php echo link_tag('&raquo; view',"tweets/show.kml?id=$tweet->id"); ?>
 									</div>
 									<div>
 										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleBottom.gif'); ?>" width="307" height="10" />
 									</div>
 								</div>
 								<div class="flag">
-									<img src="<?php print public_resource_url('images/sc-tweet_flag.gif'); ?>" width="15" height="11" />
+									<img src="<?php print public_resource_url('images/tweets/sc-tweet_flag.gif'); ?>" width="15" height="11" />
 								</div>
 								<div class="clearfix"></div>
-								</div>
-								<?php //echo link_tag('&raquo;',"tweets/show.kml?id=$tweet->id"); ?>
 							</div>
 						<?php
 							}
