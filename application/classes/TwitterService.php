@@ -227,9 +227,9 @@
 			return $rVal;
 		}
 		
-		public function getRelationStrength($user_id1,$user_id2) {
+		public function getRelationStrength($user_id1,$user_id2,$following_relation=true) {
 			if ($user_id1 && $user_id2 && $user_id1 != -1 && $user_id2 != -1) {
-				$url = "http://twittrelation.appspot.com/relation.json?user_id=$user_id1&target_id=$user_id2&is_following_relation=true";
+				$url = "http://twittrelation.appspot.com/relation.json?user_id=$user_id1&target_id=$user_id2&is_following_relation=$following_relation";
 				if (!($result = $this->cache->get($url))) {
 					$result = 0.0;
 					$curl = curl_init();
@@ -305,7 +305,7 @@
 					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach ($result as $follower_id) {
-					$user_object = $this->getUserData($follower_id, $user_id);
+					$user_object = $this->getUserData($follower_id, $user_id, true);
 					if ($user_object != null) {
 						array_push($rVal, $user_object);	
 					}
@@ -329,7 +329,7 @@
 					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach($result as $following_id) {
-					$user_object = $this->getUserData($following_id, $user_id);
+					$user_object = $this->getUserData($following_id, $user_id, false);
 					if ($user_object != null) {
 						array_push($rVal, $user_object);	
 					}
