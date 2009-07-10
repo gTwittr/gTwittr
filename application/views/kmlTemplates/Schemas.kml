@@ -15,6 +15,7 @@
 		</displayName>
 	</SimpleField>
 </Schema>
+<!--
 <Schema name="TwitterUserSchema" id="UserSchema">
 	<SimpleField type="int" id="twitter_id">
 		<displayName><![CDATA[]]></displayName>
@@ -41,11 +42,64 @@
 		<displayName><![CDATA[]]></displayName>
 	</SimpleField>
 </Schema>
+-->
 <Schema name="TweetDataSchema" id="TweetSchema">
 	<SimpleField type="string" id="screen_name">
 		<displayName><![CDATA[]]></displayName>
 	</SimpleField>
 	<SimpleField type="string" id="text">
 		<displayName><![CDATA[]]></displayName>
+	</SimpleField>
+</Schema>
+<Schema name="TwitterUserSchema" id="UserSchema">
+	<SimpleField type="string" id="screen_name">
+		<displayName>
+			<![CDATA[Name:]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="location_name">
+		<displayName>
+			<![CDATA[<b>Location:</b>]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="web_url">
+		<displayName>
+			<![CDATA[Web:]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="bio">
+		<displayName>
+			<![CDATA[Bio:]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" name="tweets_list">
+		<displayName>
+			<![CDATA[Recent Tweets]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="following_link">
+		<displayName>
+			<![CDATA[Following]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="follower_link">
+		<displayName>
+			<![CDATA[Follower]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="int" id="followers_count">
+		<displayName>
+			<![CDATA[Followers]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="int" id="following_count">
+		<displayName>
+			<![CDATA[Following]]>
+		</displayName>
+	</SimpleField>
+	<SimpleField type="string" id="icon_url">
+		<displayName>
+			<![CDATA[Icon]]>
+		</displayName>
 	</SimpleField>
 </Schema>

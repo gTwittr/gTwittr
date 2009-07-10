@@ -50,18 +50,25 @@
 	</Style>
 	
 	<?php
-		//Standardstyle für eine Linie, hier muss die Stärke noch entsprechend angepasst werden
-	?>
-	<Style id="geWittrStandardLineStyle">
-      <LineStyle>
-        <color><?php echo $lineStyleColor; ?></color>
-        <width>4</width>
-      </LineStyle>
-      <PolyStyle>
-        <color><?php echo $polyStyleColor; ?></color>
-      </PolyStyle>
-    </Style>
+		function getLineStyleName($strength) {
+			$strengthStripped = str_replace('.','',$strength);
+			return "lineStyle_$strengthStripped";
+		}
 	
+		foreach(array(0.0,0.3,0.5,0.6,1.0) as $strength) {
+	?>
+		<Style id="<?php echo getLineStyleName($strength); ?>">
+	      <LineStyle>
+	        <color><?php echo $lineStyleColor; ?></color>
+	        <width><?php echo (0.5 + ($strength * 5)); ?></width>
+	      </LineStyle>
+	      <PolyStyle>
+	        <color><?php echo $polyStyleColor; ?></color>
+	      </PolyStyle>
+	    </Style>	
+	<?php
+		}
+	?>
 	<?php
 		//Übersichtsseite
 	?>
@@ -91,7 +98,7 @@
 								<div class="avatar" style="background:url('<?php echo $f->icon_url; ?>'); width:73px; height:73px; background-repeat: none;">
 									<a class="nameOverlay" href="#"><?php echo $f->screen_name; ?></a>
 								</div>
-								<?php echo link_tag('&raquo;',"#friend_placemark_$f->twitter_id;balloonFlyto",false,false); ?>
+								<?php echo link_tag('view &raquo;',"#friend_placemark_$f->twitter_id;balloonFlyto",false,false); ?>
 							</div>
 						<?php	
 						}
@@ -115,7 +122,7 @@
 				<?php echo $location->getLongitude(); ?>,<?php echo $location->getLatitude(); ?>,0 <?php echo $friend->location->getLongitude(); ?>,<?php echo $friend->location->getLatitude(); ?>,0 
 			</coordinates>
 		</LineString>
-		<styleUrl>#geWittrStandardLineStyle</styleUrl>
+		<styleUrl><?php echo getLineStyleName($friend->strength); ?></styleUrl>
 	</Placemark>
 	<?php
 	}
@@ -149,20 +156,43 @@
 			<styleUrl>#default_friend_style</styleUrl>
 			<ExtendedData>
 			<SchemaData schemaUrl="#UserSchema">
-				<SimpleData name="twitter_id"><?php echo $friend->twitter_id; ?></SimpleData>
 				<SimpleData name="screen_name"><?php echo $friend->screen_name; ?></SimpleData>
-				<SimpleData name="description"><?php echo $friend->description; ?></SimpleData>
+				<SimpleData name="location_name"><?php echo $friend->location_name; ?></SimpleData>
+				<SimpleData name="web_url"><?php echo $friend->url; ?></SimpleData>
+				<SimpleData name="bio"><?php echo $friend->description; ?></SimpleData>
+				<SimpleData name="followers_link"><![CDATA[<?php echo link_tag('Followers',"main/followers.kml?user_id=$friend->twitter_id#start;balloonFlyto",true); ?>]]></SimpleData>
+				<SimpleData name="following_link"><![CDATA[<?php echo link_tag('Following',"main/following.kml?user_id=$friend->twitter_id#start;balloonFlyto",true); ?>]]></SimpleData>
 				<SimpleData name="followers_count"><?php echo $friend->followers_count; ?></SimpleData>
 				<SimpleData name="following_count"><?php echo $friend->following_count; ?></SimpleData>
-				<SimpleData name="followers_link"><![CDATA[<?php echo link_tag('Link',"main/followers.kml?user_id=$friend->twitter_id#start;balloonFlyto",true); ?>]]></SimpleData>
-				<SimpleData name="following_link"><![CDATA[<?php echo link_tag('Link',"main/following.kml?user_id=$friend->twitter_id#start;balloonFlyto",true); ?>]]></SimpleData>
-				<SimpleData name="tweet_list">
+				<SimpleData name="tweets_list">
 					<![CDATA[
 						<?php
-							echo json_encode($friend->tweets);
+							foreach($friend->tweets as $tweet) {
+						?>
+							<div class="tweet">
+								<div class="messageBox">
+									<div>
+										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleTop.gif'); ?>" width="307" height="12" />
+									</div>
+									<div class="messageText">
+										<?php echo $tweet->text; ?><br />
+										<?php echo link_tag('&raquo; view',"tweets/show.kml?tid=$tweet->id",true); ?>
+									</div>
+									<div>
+										<img src="<?php print public_resource_url('images/tweets/sc-tweet_bubbleBottom.gif'); ?>" width="307" height="10" />
+									</div>
+								</div>
+								<div class="flag">
+									<img src="<?php print public_resource_url('images/tweets/sc-tweet_flag.gif'); ?>" width="15" height="11" />
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						<?php
+							}
 						?>
 					]]>
 				</SimpleData>
+				<SimpleData name="icon_url"><?php echo $friend->icon_url; ?></SimpleData>
 			</SchemaData>
 		</ExtendedData>
 		</Placemark>

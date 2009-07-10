@@ -19,11 +19,6 @@
 		</IconStyle>
 	</Style>
 	<Placemark>
-		<text>
-			<![CDATA[
-				<?php echo $tweet->text; ?>
-			]]>
-		</text>
 		<name><?php echo substr($tweet->text, 0, 15) . '...'; ?></name>
 		<LookAt>
 			<longitude><?php echo $tweet->location->getLongitude(); ?></longitude>

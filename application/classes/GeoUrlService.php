@@ -20,7 +20,6 @@
 			if (isset($shortUrl) && !empty($shortUrl)) {
 				$url = 'http://untiny.me/api/1.0/extract/?url=' . $shortUrl . '&format=json';
 				$result = $this->queryShortUrlService($url);
-
 				if (isset($result) && !empty($result)) {
 					return $this->urlToLocation($result);
 				}

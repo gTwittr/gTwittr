@@ -96,7 +96,7 @@
 				$user_id = $this->ownTwitterId();
 			}
 			$url = "http://twitter.com/users/show/$user_id.json";
-			return $this->callTwitter($url);
+			return $this->callTwitter($url,'GET',true,true);
 		}
 		
 		public function getLocation($user_id = -1) {
@@ -188,7 +188,7 @@
 			return $rVal;
 		}
 		
-		public function buildUser($twitter_data) {
+		public function buildUser($twitter_data, $other_user_id = -1) {
 			$rVal = null;
 			if ($twitter_data && !$twitter_data->error) {
 				$rVal = new stdClass();
@@ -209,14 +209,48 @@
 				$rVal->followers_count = $twitter_data->followers_count;
 				$rVal->url = $twitter_data->url;
 				$rVal->tweets = $this->getUserTimelineTweets($rVal->twitter_id);
+				$strength = 0.0;
+				if ($other_user_id != -1) {
+					$strength = $this->getRelationStrength($other_user_id, $twitter_data->id);
+				}
+				$rVal->strength = $strength;
 			}
 			return $rVal;
 		}
 		
-		public function getUserData($user_id=-1) {
+		public function getUserData($user_id=-1, $other_user_id=-1) {
 			$twitter_data = $this->getUserInfo($user_id);
-			$rVal = $this->buildUser($twitter_data);
+			if ($other_user_id == -1) {
+				$other_user_id = $this->ownTwitterId();
+			}
+			$rVal = $this->buildUser($twitter_data, $other_user_id);
 			return $rVal;
+		}
+		
+		public function getRelationStrength($user_id1,$user_id2) {
+			if ($user_id1 && $user_id2 && $user_id1 != -1 && $user_id2 != -1) {
+				$url = "http://twittrelation.appspot.com/relation.json?user_id=$user_id1&target_id=$user_id2&is_following_relation=true";
+				if (!($result = $this->cache->get($url))) {
+					$result = 0.0;
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_GET, 1);
+					curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
+					curl_setopt($curl, CURLOPT_HEADER, false);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+					curl_setopt($curl, CURLOPT_URL, $url);
+					$json_data = curl_exec($curl);
+					if ($json_data && !empty($json_data)) {
+						$result_data = json_decode($json_data);
+						if ($result_data && !$result_data->error) {
+							$result = $result_data->relation_strength;
+						}
+					}
+					$this->cache->save($result,$url);
+				}
+				return $result;
+			}
+			return 0.0;
 		}
 		
 		public function getTweet($tweet_id) {
@@ -231,7 +265,6 @@
 			$tweet->location = LocationService::getInstance()->extractLocation($tweet->text, $twitter_data->user->location);
 			$tweet->screen_name = $twitter_data->user->screen_name;
 			$tweet->icon_url = GraphicService::getInstance()->generateProfileImage($twitter_data->user->profile_image_url,COLOR_USER);
-			
 			
 			return $tweet;
 		}
@@ -262,7 +295,7 @@
 			} else {
 				$url = "http://twitter.com/followers/ids/$user_id.json";	
 			}
-			$result = $this->callTwitter($url,'GET',true,false);
+			$result = $this->callTwitter($url,'GET',true,true);
 			$rVal = array();
 			//die(var_dump($result));
 			if (!$result->error) {
@@ -272,7 +305,7 @@
 					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach ($result as $follower_id) {
-					$user_object = $this->getUserData($follower_id);
+					$user_object = $this->getUserData($follower_id, $user_id);
 					if ($user_object != null) {
 						array_push($rVal, $user_object);	
 					}
@@ -287,7 +320,7 @@
 			} else {
 				$url = "http://twitter.com/friends/ids/$user_id.json";	
 			}
-			$result = $this->callTwitter($url,'GET',true,false);
+			$result = $this->callTwitter($url,'GET',true,true);
 			$rVal = array();
 			if (!$result->error) {
 				$result = (array) $result;
@@ -296,7 +329,7 @@
 					$result = array_diff($result, $this->getBlockedUserIds());		
 				}
 				foreach($result as $following_id) {
-					$user_object = $this->getUserData($following_id);
+					$user_object = $this->getUserData($following_id, $user_id);
 					if ($user_object != null) {
 						array_push($rVal, $user_object);	
 					}
