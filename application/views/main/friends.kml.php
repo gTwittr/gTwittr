@@ -55,7 +55,7 @@
 			return "lineStyle_$strengthStripped";
 		}
 	
-		foreach(array(0.0,0.3,0.5,0.6,1.0) as $strength) {
+		foreach(array(0.0,0.3,0.5,0.7,1.0) as $strength) {
 	?>
 		<Style id="<?php echo getLineStyleName($strength); ?>">
 	      <LineStyle>
