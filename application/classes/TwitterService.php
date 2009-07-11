@@ -188,7 +188,7 @@
 			return $rVal;
 		}
 		
-		public function buildUser($twitter_data, $other_user_id = -1) {
+		public function buildUser($twitter_data, $other_user_id = -1, $following_relation = true) {
 			$rVal = null;
 			if ($twitter_data && !$twitter_data->error) {
 				$rVal = new stdClass();
@@ -211,25 +211,26 @@
 				$rVal->tweets = $this->getUserTimelineTweets($rVal->twitter_id);
 				$strength = 0.0;
 				if ($other_user_id != -1) {
-					$strength = $this->getRelationStrength($other_user_id, $twitter_data->id);
+					$strength = $this->getRelationStrength($twitter_data->id, $other_user_id, $following_relation);
 				}
 				$rVal->strength = $strength;
 			}
 			return $rVal;
 		}
 		
-		public function getUserData($user_id=-1, $other_user_id=-1) {
+		public function getUserData($user_id=-1, $other_user_id=-1, $following_relation=true) {
 			$twitter_data = $this->getUserInfo($user_id);
 			if ($other_user_id == -1) {
 				$other_user_id = $this->ownTwitterId();
 			}
-			$rVal = $this->buildUser($twitter_data, $other_user_id);
+			$rVal = $this->buildUser($twitter_data, $other_user_id, $following_relation);
 			return $rVal;
 		}
 		
 		public function getRelationStrength($user_id1,$user_id2,$following_relation=true) {
 			if ($user_id1 && $user_id2 && $user_id1 != -1 && $user_id2 != -1) {
-				$url = "http://twittrelation.appspot.com/relation.json?user_id=$user_id1&target_id=$user_id2&is_following_relation=$following_relation";
+				$following_relation_string = $following_relation ? 'true' : 'false';
+				$url = "http://twittrelation.appspot.com/relation.json?user_id=$user_id1&target_id=$user_id2&is_following_relation=$following_relation_string";
 				if (!($result = $this->cache->get($url))) {
 					$result = 0.0;
 					$curl = curl_init();

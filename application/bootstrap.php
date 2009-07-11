@@ -39,6 +39,8 @@
 	$controller = 'index';
 	$view = 'index';
 	
+	if (!isset($_GET))
+	
 	if (count($route_parts) == 3) {
 		$session = $route_parts[0];
 		$controller = $route_parts[1];
